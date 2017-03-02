@@ -7,7 +7,6 @@
         mc:Ignorable="d"
         Title="Realty" Height="480" Width="640" MinWidth="320" MinHeight="240">
     <Window.Resources>
-        <XmlDataProvider x:Key="realtyProvider" Source="RealEstateData.xml" XPath="realty" />
     </Window.Resources>
 
     <Grid>
@@ -23,7 +22,7 @@
                 <StackPanel DockPanel.Dock="Left">
                 <TextBlock FontWeight="Bold" Text="Список объектов недвижимости" />
                 <ListBox x:Name="_realtyListBox" DisplayMemberPath="title"
-                         ItemsSource="{Binding Source={StaticResource realtyProvider}, XPath=realEstate}">
+                         ItemsSource="{Binding Source=Title}" Height="299">
                 </ListBox>
                 </StackPanel>
                 <DataGrid DockPanel.Dock="Left" />

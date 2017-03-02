@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RealtyApp.Models;
 
 namespace RealtyApp
 {
@@ -20,9 +21,13 @@ namespace RealtyApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private RealtyContext _db;
+
         public MainWindow()
         {
             InitializeComponent();
+            _db = new RealtyContext();
+            //_realtyListBox.ItemsSource = _db.Realty;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

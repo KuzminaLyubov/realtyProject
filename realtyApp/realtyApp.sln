@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "realtyApp", "realtyApp.csproj", "{9D7F22FD-6330-40C4-A4D4-83B2FF9B3FD1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealtyApp", "RealtyApp.csproj", "{9D7F22FD-6330-40C4-A4D4-83B2FF9B3FD1}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "..\Database\Database.sqlproj", "{AB8865E0-599E-41AA-AA4A-4B3DACC17D91}"
 EndProject
