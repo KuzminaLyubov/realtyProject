@@ -2,4 +2,14 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+*.dll
+*.dbmdl
+*.jfm
+
 /Database/obj/Debug
+/Database/bin/Debug
+/Database/Database.sqlproj.user
+
+/realtyApp/obj/Debug
+/realtyApp/bin/Debug
+/realtyApp/.vs/realtyApp/v14/.suo
