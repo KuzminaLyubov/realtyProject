@@ -14,4 +14,3 @@ insert into dbo.Realty ([Title], [Address], [Price]) values ('Дача 6 сот�
 insert into dbo.Realty ([Title], [Address], [Price]) values ('Чудесная 1к квартира','Москва, Ленинский проспект, 1', 10000000);
 insert into dbo.Realty ([Title], [Address], [Price]) values ('Участок','Купавна, Моск. обл., ул. Ленина, д.20', 600000);
 
-select * from dbo.Realty

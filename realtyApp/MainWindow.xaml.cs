@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RealtyApp.Models;
+using System.Data.Entity;
 
 namespace RealtyApp
 {
@@ -21,18 +22,38 @@ namespace RealtyApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private RealtyContext _db;
+        RealtyDatabaseEntities _context = new RealtyDatabaseEntities();
 
         public MainWindow()
         {
             InitializeComponent();
-            _db = new RealtyContext();
-            //_realtyListBox.ItemsSource = _db.Realty;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            this._context.Dispose();
+        }
+
+        private void Realty_Loaded(object sender, RoutedEventArgs e)
         {
 
+            System.Windows.Data.CollectionViewSource realtyViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("realtyViewSource")));
+            // Load data by setting the CollectionViewSource.Source property:
+            // realtyViewSource.Source = [generic data source]
+
+            // Load is an extension method on IQueryable, 
+            // defined in the System.Data.Entity namespace.
+            // This method enumerates the results of the query, 
+            // similar to ToList but without creating a list.
+            // When used with Linq to Entities this method 
+            // creates entity objects and adds them to the context.
+            _context.Realty.Load();
+
+            // After the data is loaded call the DbSet<T>.Local property 
+            // to use the DbSet<T> as a binding source.
+            realtyViewSource.Source = _context.Realty.Local;
         }
     }
 }
+
