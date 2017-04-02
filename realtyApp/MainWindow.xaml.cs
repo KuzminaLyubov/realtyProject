@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RealtyApp.Models;
+using System.Data.Entity;
 
 namespace RealtyApp
 {
@@ -21,18 +22,28 @@ namespace RealtyApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private RealtyContext _db;
+        RealtyDatabaseEntities _context = new RealtyDatabaseEntities();
 
         public MainWindow()
         {
             InitializeComponent();
-            _db = new RealtyContext();
-            //_realtyListBox.ItemsSource = _db.Realty;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            this._context.Dispose();
+        }
+
+        private void Realty_Loaded(object sender, RoutedEventArgs e)
         {
 
+            CollectionViewSource realtyViewSource = ((CollectionViewSource)(this.FindResource("realtyViewSource")));
+
+            _context.Realty.Load();
+
+            realtyViewSource.Source = _context.Realty.Local;
         }
     }
 }
+

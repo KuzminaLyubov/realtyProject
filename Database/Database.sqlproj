@@ -71,6 +71,6 @@
     <None Include="Database.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="Scripts\Script.PostDeployment.TestData.sql" />
+    <PostDeploy Include="Scripts\TestData.sql" />
   </ItemGroup>
 </Project>
