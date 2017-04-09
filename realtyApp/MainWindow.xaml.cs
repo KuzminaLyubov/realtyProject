@@ -37,12 +37,25 @@ namespace RealtyApp
 
         private void Realty_Loaded(object sender, RoutedEventArgs e)
         {
+            System.Windows.Data.CollectionViewSource realEstateViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("realEstateViewSource")));
+            // Load data by setting the CollectionViewSource.Source property:
+            //realEstateViewSource.Source = [generic data source]
 
-            CollectionViewSource realtyViewSource = ((CollectionViewSource)(this.FindResource("realtyViewSource")));
+            //https://msdn.microsoft.com/en-us/library/jj574514(v=vs.113).aspx
+            
+            // Load is an extension method on IQueryable, 
+            // defined in the System.Data.Entity namespace.
+            // This method enumerates the results of the query, 
+            // similar to ToList but without creating a list.
+            // When used with Linq to Entities this method 
+            // creates entity objects and adds them to the context.
 
-            _context.Realty.Load();
+            _context.RealEstates.Load();
 
-            realtyViewSource.Source = _context.Realty.Local;
+            // After the data is loaded call the DbSet<T>.Local property 
+            // to use the DbSet<T> as a binding source.
+            realEstateViewSource.Source = _context.RealEstates.Local;
+
         }
     }
 }

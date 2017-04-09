@@ -1,0 +1,7 @@
+﻿CREATE TABLE [Realty].[Owners]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
+    [FullName] NVARCHAR(50) NOT NULL, 
+    [PhoneNumber] NVARCHAR(50) NOT NULL
+)
+
