@@ -81,7 +81,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Realty.cs">
+    <Compile Include="Models\Owner.cs">
+      <DependentUpon>RealtyModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RealEstate.cs">
       <DependentUpon>RealtyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\RealtyModel.Context.cs">
@@ -124,18 +127,22 @@
       <DependentUpon>RealtyModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\RealtyApp.Models.RealEstate.datasource" />
+    <None Include="Properties\DataSources\RealtyApp.Models.RealtyDatabaseEntities.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="RealtyApp.Models.Realty.datasource" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repository\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Models\RealtyModel.Context.tt">
@@ -148,9 +155,6 @@
       <DependentUpon>RealtyModel.edmx</DependentUpon>
       <LastGenOutput>RealtyModel.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

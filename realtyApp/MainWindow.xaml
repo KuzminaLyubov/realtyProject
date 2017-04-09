@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Realty" Height="480" Width="640" MinWidth="320" MinHeight="240" Loaded="Realty_Loaded">
     <Window.Resources>
-        <CollectionViewSource x:Key="realtyViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:Realty}, CreateList=True}"/>
+        <CollectionViewSource x:Key="realEstateViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:RealEstate}, CreateList=True}"/>
     </Window.Resources>
 
     <Grid>
@@ -21,7 +21,7 @@
                 </DockPanel>
             </GroupBox>
             <DockPanel DockPanel.Dock="Left">
-                <StackPanel DockPanel.Dock="Left" DataContext="{StaticResource realtyViewSource}">
+                <StackPanel DockPanel.Dock="Left" DataContext="{StaticResource realEstateViewSource}">
                     <TextBlock FontWeight="Bold" Text="Список объектов недвижимости" />
                     <ListBox x:Name="_realtyListBox" Height="299" SelectedValuePath="Address" ItemsSource="{Binding}" DisplayMemberPath="Address"/>
                 </StackPanel>
