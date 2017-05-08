@@ -16,16 +16,15 @@
             <GroupBox DockPanel.Dock="Top" Header="Поиск" Padding="5">
                 <DockPanel>
                     <Label DockPanel.Dock="Left" Content="Поиск"/>
-                    <Button x:Name="_searchButton" DockPanel.Dock="Right" Margin="5,0,0,0" Content="Искать"/>
+                    <Button x:Name="_searchButton" DockPanel.Dock="Right" Margin="5,0,0,1" Content="Искать" Click="_searchButton_Click"/>
                     <TextBox x:Name="_searchTextBox" RenderTransformOrigin="0.5,0.5" Padding="0,4,0,0"/>
                 </DockPanel>
             </GroupBox>
             <DockPanel DockPanel.Dock="Left">
                 <StackPanel DockPanel.Dock="Left" DataContext="{StaticResource realEstateViewSource}">
                     <TextBlock FontWeight="Bold" Text="Список объектов недвижимости" />
-                    <ListBox x:Name="_realtyListBox" Height="299" SelectedValuePath="Address" ItemsSource="{Binding}" DisplayMemberPath="Address"/>
+                    <ListBox x:Name="_realtyListBox" Height="299" SelectedValuePath="Address" ItemsSource="{Binding}" DisplayMemberPath="Address" SelectionChanged="_realtyListBox_SelectionChanged"/>
                 </StackPanel>
-                <DataGrid DockPanel.Dock="Left" />
             </DockPanel>
         </DockPanel>
     </Grid>

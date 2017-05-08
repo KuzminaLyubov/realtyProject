@@ -23,6 +23,7 @@ namespace RealtyApp
     public partial class MainWindow : Window
     {
         RealtyDatabaseEntities _context = new RealtyDatabaseEntities();
+        CollectionViewSource _realEstateViewSource;
 
         public MainWindow()
         {
@@ -37,7 +38,7 @@ namespace RealtyApp
 
         private void Realty_Loaded(object sender, RoutedEventArgs e)
         {
-            System.Windows.Data.CollectionViewSource realEstateViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("realEstateViewSource")));
+            _realEstateViewSource = ((CollectionViewSource)(this.FindResource("realEstateViewSource")));
             // Load data by setting the CollectionViewSource.Source property:
             //realEstateViewSource.Source = [generic data source]
 
@@ -54,8 +55,20 @@ namespace RealtyApp
 
             // After the data is loaded call the DbSet<T>.Local property 
             // to use the DbSet<T> as a binding source.
-            realEstateViewSource.Source = _context.RealEstates.Local;
+            _realEstateViewSource.Source = _context.RealEstates.Local;
 
+        }
+
+        private void _realtyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void _searchButton_Click(object sender, RoutedEventArgs e)
+        {
+            _realtyListBox.ItemsSource = _context.RealEstates.Local
+                .Where(realEstate => realEstate.Address.ToLower()
+                            .IndexOf(_searchTextBox.Text.ToLower()) > 0);
         }
     }
 }
