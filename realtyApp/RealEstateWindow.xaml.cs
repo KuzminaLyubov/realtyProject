@@ -8,25 +8,33 @@ namespace RealtyApp
     /// Interaction logic for NewRealEstateWindow.xaml
     /// </summary>
     public partial class RealEstateWindow : Window
-    {      
+    {
+        private RealtyDatabaseEntities _realtyDatabase;
 
-        public RealEstateWindow(List<Owner> owners)
+        public RealEstateWindow(RealtyDatabaseEntities realtyDatabase)
         {
             InitializeComponent();
 
-            comboBoxFaculties.ItemsSource = owners;
+            _realtyDatabase = realtyDatabase;
+
+            _labelError.Visibility = Visibility.Hidden;
         }
 
-        RealEstate _newRealEstate;
+        private RealEstate _realEstate;
 
-        public RealEstate NewRealEstate
+        public RealEstate RealEstate
         {
-            get {
-                return _newRealEstate;
+            get
+            {
+                return _realEstate;
+            }
+            set
+            {
+                _realEstate = value;
             }
         }
 
-        private void buttonAdd_Click(object sender, RoutedEventArgs e)
+        private void _buttonAdd_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(_textBoxTitle.Text))
             {
@@ -59,17 +67,27 @@ namespace RealtyApp
                 return;
             }
 
-            if (comboBoxFaculties.SelectedItem == null) {
+            if (_comboBoxOwner.SelectedItem == null) {
                 MessageBox.Show("Необходимо выбрать факультет");
-                comboBoxFaculties.Focus();
+                _comboBoxOwner.Focus();
                 return;
             }
-            
-            _newLecturer = new Lecturer(textBoxFio.Text,
-                rating);
-            _newLecturer.Faculty = comboBoxFaculties.SelectedItem as Faculty;
+
+            _realEstate = new RealEstate {
+                Title = _textBoxTitle.Text,
+                Address = _textBoxAddress.Text,
+                Price = price,
+                Owner = _comboBoxOwner.SelectedItem as Owner
+            };
+
             // Close current window
             DialogResult = true;
         }
+
+        private void RealEstateWindowName_Loaded(object sender, RoutedEventArgs e)
+        {
+            _comboBoxOwner.ItemsSource = _realtyDatabase.Owners.Local;
+        }
+
     }
 }

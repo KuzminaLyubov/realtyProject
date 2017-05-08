@@ -9,7 +9,7 @@ namespace RealtyApp
     /// </summary>
     public partial class OwnerWindow : Window
     {
-        Owner _owner;
+        private Owner _owner;
 
         public OwnerWindow()
         {
@@ -18,7 +18,19 @@ namespace RealtyApp
             _labelError.Visibility = Visibility.Hidden;
         }
 
-        private void buttonAdd_Click(object sender, RoutedEventArgs e)
+        public Owner RealEstateOwner
+        {
+            get
+            {
+                return _owner;
+            }
+            set
+            {
+                _owner = value;
+            }
+        }
+
+        private void _buttonAdd_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(_textBoxFullName.Text))
             {
@@ -35,7 +47,6 @@ namespace RealtyApp
                 _textBoxPhoneNumber.Focus();
                 return;
             }
-
 
             _owner = new Owner
             {

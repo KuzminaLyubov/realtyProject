@@ -32,36 +32,33 @@ namespace RealtyApp
             CollectionViewSource realEstateViewSource = ((CollectionViewSource)(this.FindResource("realEstateViewSource")));
             // Load data by setting the CollectionViewSource.Source property:
             //realEstateViewSource.Source = [generic data source]
-
             //https://msdn.microsoft.com/en-us/library/jj574514(v=vs.113).aspx
 
-            // Load is an extension method on IQueryable, 
-            // defined in the System.Data.Entity namespace.
-            // This method enumerates the results of the query, 
-            // similar to ToList but without creating a list.
-            // When used with Linq to Entities this method 
-            // creates entity objects and adds them to the context.
+            await _realtyDatabase.Users.LoadAsync();
 
             LoginWindow loginWindow = new LoginWindow(_realtyDatabase);
-
             loginWindow.ShowDialog();
-
             if (loginWindow.Regime == LoginWindow.LoginRegime.Exit)
             {
                 Close();
                 return;
             }
 
+            // LoadAsync - asynchronous call without blocking the window thread
             await _realtyDatabase.RealEstates.LoadAsync();
 
             // After the data is loaded call the DbSet<T>.Local property 
             // to use the DbSet<T> as a binding source.
             realEstateViewSource.Source = _realtyDatabase.RealEstates.Local;
+
+            await _realtyDatabase.Owners.LoadAsync();
+
         }
 
-        private void _realtyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void RefreshListBox()
         {
-
+            _realtyListBox.ItemsSource = null;
+            _realtyListBox.ItemsSource = _realtyDatabase.RealEstates.Local;
         }
 
         private void Search()
@@ -73,8 +70,44 @@ namespace RealtyApp
 
         private void _searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Search();
+            if (string.IsNullOrEmpty(_searchTextBox.Text.Trim()))
+                RefreshListBox();
+            else
+                Search();
         }
+
+        private void _buttonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new RealEstateWindow(_realtyDatabase);
+            if (window.ShowDialog().Value)
+            {
+                _realtyDatabase.RealEstates.Add(window.RealEstate);
+                SaveData();
+                RefreshListBox();
+            }
+        }
+
+        private void _buttonDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (_realtyListBox.SelectedIndex != -1)
+            {
+                _realtyDatabase.RealEstates.Local.RemoveAt(_realtyListBox.SelectedIndex);
+                SaveData();
+                RefreshListBox();
+            }
+        }
+
+        private void _realtyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // If selected index = -1, we set IsEnabled to false
+            _buttonDelete.IsEnabled = _realtyListBox.SelectedIndex != -1;
+        }
+
+        private void SaveData()
+        {
+            _realtyDatabase.SaveChangesAsync();
+        }
+
     }
 }
 

@@ -30,7 +30,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FullName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Password" Type="binary" MaxLength="16" Nullable="false" />
+          <Property Name="HashedPassword" Type="binary" MaxLength="16" Nullable="false" />
         </EntityType>
         <Association Name="FK_RealEstates_Owners">
           <End Role="Owners" Type="Self.Owners" Multiplicity="1" />
@@ -105,7 +105,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FullName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="Binary" Nullable="false" MaxLength="16" FixedLength="true" />
+          <Property Name="HashedPassword" Type="Binary" Nullable="false" MaxLength="16" FixedLength="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -136,7 +136,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="RealtyDatabaseModel.User">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="HashedPassword" ColumnName="HashedPassword" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using RealtyApp.Models;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace RealtyApp
 {
@@ -42,18 +43,12 @@ namespace RealtyApp
             return Convert.ToBase64String(hash);
         }
 
-        private async void RealtyLogin_Loaded(object sender, RoutedEventArgs e)
-        {
-            await _realtyDatabase.Users.LoadAsync();
-        }
-
         private bool AdminLoginSuccessful()
         {
-            // Хэш зарегистрированного пользователя должен браться из хранилища
-            // данных программы
+            // Хэш зарегистрированного пользователя должен браться из базы данных программы
             var hashFromDb = _realtyDatabase.Users.Local
                 .Where(user => user.Login == _textBoxLogin.Text)
-                .Select(user => Convert.ToBase64String(user.Password))
+                .Select(user => Convert.ToBase64String(user.HashedPassword))
                 .SingleOrDefault();
 
             if (hashFromDb == null)

@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RealtyApp"
-        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="RealEstateWindow" x:Class="RealtyApp.RealEstateWindow"
+        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="RealEstateWindowName" x:Class="RealtyApp.RealEstateWindow"
         mc:Ignorable="d"
-        Title="Новый объект недвижимости" Height="320" Width="320" MinWidth="320" MinHeight="320" MaxWidth="320" MaxHeight="320" ResizeMode="NoResize">
+        Title="Новый объект недвижимости" Height="320" Width="320" MinWidth="320" MinHeight="320" MaxWidth="320" MaxHeight="320" ResizeMode="NoResize" Loaded="RealEstateWindowName_Loaded">
     <Grid>
         <Label x:Name="_labelError" Content="Ошибка" Margin="11,2,11,0" 
             VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible" FontWeight="Bold"/>
@@ -20,10 +20,10 @@
         <Label x:Name="_labelPrice" Content="Стоимость (руб):" Margin="11,126,11,0" 
             VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
         <TextBox x:Name="_textBoxPrice" Margin="10,151,10,0" VerticalAlignment="Top" Height="25"/>
-        <Button x:Name="_buttonAdd" Content="Добавить"  Margin="97,251,97,0" 
-                VerticalAlignment="Top" Width="120" Height="25" HorizontalAlignment="Center" Click="buttonLogin_Click"/>
-        <Label x:Name="_labelOwner" Content="Владелец:" Margin="11,182,11,0" 
+        <Label x:Name="_labelOwner" Content="Владелец объекта недвижимости:" Margin="11,182,11,0" 
             VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
         <ComboBox x:Name="_comboBoxOwner" Margin="10,207,10,0" VerticalAlignment="Top" Height="25"/>
+        <Button x:Name="_buttonAdd" Content="Добавить"  Margin="97,251,97,0" 
+                VerticalAlignment="Top" Width="120" Height="25" HorizontalAlignment="Center" Click="_buttonAdd_Click"/>
     </Grid>
 </Window>

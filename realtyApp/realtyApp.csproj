@@ -99,6 +99,7 @@
     <Compile Include="Models\Owner.cs">
       <DependentUpon>RealtyModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Owner.Extended.cs" />
     <Compile Include="Models\RealEstate.cs">
       <DependentUpon>RealtyModel.tt</DependentUpon>
     </Compile>
@@ -161,9 +162,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repository\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

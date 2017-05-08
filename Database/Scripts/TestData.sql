@@ -20,16 +20,16 @@ USING (VALUES
  ,(2,'Кузьмина Любовь', 'lyubov', hashbytes('MD5','qwerty'))
  ,(3,'Сергей Ефремов', 'efremov', hashbytes('MD5','12345'))
 
-) AS Source ([Id],[FullName],[Login],[Password])
+) AS Source ([Id],[FullName],[Login],[HashedPassword])
 ON (Target.[Id] = Source.[Id])
 WHEN MATCHED THEN
  UPDATE SET
  [FullName] = Source.[FullName],
  [Login] = Source.[Login],
- [Password] = Source.[Password]
+ [HashedPassword] = Source.[HashedPassword]
 WHEN NOT MATCHED BY TARGET THEN
- INSERT([Id],[FullName],[Login],[Password])
- VALUES(Source.[Id],Source.[FullName],Source.[Login],Source.[Password])
+ INSERT([Id],[FullName],[Login],[HashedPassword])
+ VALUES(Source.[Id],Source.[FullName],Source.[Login],Source.[HashedPassword])
 ;
 
 SET IDENTITY_INSERT [Realty].[Users] OFF

@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RealtyApp"
-        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="LoginWindow" x:Class="RealtyApp.LoginWindow"
+        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="LoginWindowName" x:Class="RealtyApp.LoginWindow"
         mc:Ignorable="d"
         Title="Вход в систему" Height="240" Width="320" MinWidth="320" MinHeight="240" MaxWidth="320" MaxHeight="240" 
-        PreviewKeyDown="Page_PreviewKeyDown" Loaded="RealtyLogin_Loaded">
+        PreviewKeyDown="Page_PreviewKeyDown">
     <Grid>
         <Label x:Name="_labelError" Content="Неверный логин или пароль" Margin="56,2,76,0" 
             VerticalAlignment="Top" Width="180" Height="25" HorizontalAlignment="Center" Visibility="Visible" FontWeight="Bold"/>
