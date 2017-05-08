@@ -22,7 +22,9 @@ namespace RealtyApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        RealtyDatabaseEntities _context = new RealtyDatabaseEntities();
+        RealtyDatabaseEntities _db = new RealtyDatabaseEntities();
+
+        bool IsReadOnlyMode { get; set; }
 
         public MainWindow()
         {
@@ -32,17 +34,27 @@ namespace RealtyApp
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             base.OnClosing(e);
-            this._context.Dispose();
+            _db.Dispose();
         }
 
         private void Realty_Loaded(object sender, RoutedEventArgs e)
         {
+            LoginWindow loginWindow = new LoginWindow();
+
+            loginWindow.ShowDialog();
+
+            if (loginWindow.Regime == LoginWindow.LoginRegime.Exit)
+            {
+                Close();
+                return;
+            }
+
             CollectionViewSource realEstateViewSource = ((CollectionViewSource)(this.FindResource("realEstateViewSource")));
             // Load data by setting the CollectionViewSource.Source property:
             //realEstateViewSource.Source = [generic data source]
 
             //https://msdn.microsoft.com/en-us/library/jj574514(v=vs.113).aspx
-            
+
             // Load is an extension method on IQueryable, 
             // defined in the System.Data.Entity namespace.
             // This method enumerates the results of the query, 
@@ -50,12 +62,11 @@ namespace RealtyApp
             // When used with Linq to Entities this method 
             // creates entity objects and adds them to the context.
 
-            _context.RealEstates.Load();
+            _db.RealEstates.Load();
 
             // After the data is loaded call the DbSet<T>.Local property 
             // to use the DbSet<T> as a binding source.
-            realEstateViewSource.Source = _context.RealEstates.Local;
-
+            realEstateViewSource.Source = _db.RealEstates.Local;
         }
 
         private void _realtyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -65,7 +76,7 @@ namespace RealtyApp
 
         private void Search()
         {
-            _realtyListBox.ItemsSource = _context.RealEstates.Local
+            _realtyListBox.ItemsSource = _db.RealEstates.Local
                 .Where(realEstate => realEstate.Address.ToLower()
                             .Contains(_searchTextBox.Text.ToLower()));
         }
