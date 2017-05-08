@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RealtyApp"
-        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="Realty" x:Class="RealtyApp.LoginWindow"
+        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="RealtyLogin" x:Class="RealtyApp.LoginWindow"
         mc:Ignorable="d"
-        Title="Вход в систему" Height="2400" Width="320" MinWidth="320" MinHeight="240" MaxWidth="320" MaxHeight="240" PreviewKeyDown="Page_PreviewKeyDown">
+        Title="Вход в систему" Height="2400" Width="320" MinWidth="320" MinHeight="240" MaxWidth="320" MaxHeight="240" PreviewKeyDown="Page_PreviewKeyDown" Loaded="RealtyLogin_Loaded">
 
     <Grid>
         <Label x:Name="_labelLogin" Content="Логин администратора:" Margin="10,20,10,0" 

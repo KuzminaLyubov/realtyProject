@@ -8,6 +8,7 @@
         <EntityTypeShape EntityType="RealtyDatabaseModel.Owner" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="RealtyDatabaseModel.RealEstate" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
         <AssociationConnector Association="RealtyDatabaseModel.FK_RealEstates_Owners" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="RealtyDatabaseModel.User" Width="1.5" PointX="5.25" PointY="0.875" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

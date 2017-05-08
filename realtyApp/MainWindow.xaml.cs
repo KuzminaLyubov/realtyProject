@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using RealtyApp.Models;
 using System.Data.Entity;
 
@@ -22,7 +12,7 @@ namespace RealtyApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        RealtyDatabaseEntities _db = new RealtyDatabaseEntities();
+        RealtyDatabaseEntities _realtyDatabase = new RealtyDatabaseEntities();
 
         bool IsReadOnlyMode { get; set; }
 
@@ -34,21 +24,11 @@ namespace RealtyApp
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             base.OnClosing(e);
-            _db.Dispose();
+            _realtyDatabase.Dispose();
         }
 
-        private void Realty_Loaded(object sender, RoutedEventArgs e)
+        private async void Realty_Loaded(object sender, RoutedEventArgs e)
         {
-            LoginWindow loginWindow = new LoginWindow();
-
-            loginWindow.ShowDialog();
-
-            if (loginWindow.Regime == LoginWindow.LoginRegime.Exit)
-            {
-                Close();
-                return;
-            }
-
             CollectionViewSource realEstateViewSource = ((CollectionViewSource)(this.FindResource("realEstateViewSource")));
             // Load data by setting the CollectionViewSource.Source property:
             //realEstateViewSource.Source = [generic data source]
@@ -62,11 +42,21 @@ namespace RealtyApp
             // When used with Linq to Entities this method 
             // creates entity objects and adds them to the context.
 
-            _db.RealEstates.Load();
+            LoginWindow loginWindow = new LoginWindow(_realtyDatabase);
+
+            loginWindow.ShowDialog();
+
+            if (loginWindow.Regime == LoginWindow.LoginRegime.Exit)
+            {
+                Close();
+                return;
+            }
+
+            await _realtyDatabase.RealEstates.LoadAsync();
 
             // After the data is loaded call the DbSet<T>.Local property 
             // to use the DbSet<T> as a binding source.
-            realEstateViewSource.Source = _db.RealEstates.Local;
+            realEstateViewSource.Source = _realtyDatabase.RealEstates.Local;
         }
 
         private void _realtyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -76,7 +66,7 @@ namespace RealtyApp
 
         private void Search()
         {
-            _realtyListBox.ItemsSource = _db.RealEstates.Local
+            _realtyListBox.ItemsSource = _realtyDatabase.RealEstates.Local
                 .Where(realEstate => realEstate.Address.ToLower()
                             .Contains(_searchTextBox.Text.ToLower()));
         }

@@ -27,5 +27,6 @@ namespace RealtyApp.Models
     
         public virtual DbSet<Owner> Owners { get; set; }
         public virtual DbSet<RealEstate> RealEstates { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

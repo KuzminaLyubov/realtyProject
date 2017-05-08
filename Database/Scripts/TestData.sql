@@ -12,6 +12,32 @@ Post-Deployment Script Template
 
 SET NOCOUNT ON
 GO 
+SET IDENTITY_INSERT [Realty].[Users] ON
+GO
+MERGE INTO [Realty].[Users] AS Target
+USING (VALUES
+  (1,'admin', 'admin', hashbytes('MD5','admin'))
+ ,(2,'Кузьмина Любовь', 'lyubov', hashbytes('MD5','qwerty'))
+ ,(3,'Сергей Ефремов', 'efremov', hashbytes('MD5','12345'))
+
+) AS Source ([Id],[FullName],[Login],[Password])
+ON (Target.[Id] = Source.[Id])
+WHEN MATCHED THEN
+ UPDATE SET
+ [FullName] = Source.[FullName],
+ [Login] = Source.[Login],
+ [Password] = Source.[Password]
+WHEN NOT MATCHED BY TARGET THEN
+ INSERT([Id],[FullName],[Login],[Password])
+ VALUES(Source.[Id],Source.[FullName],Source.[Login],Source.[Password])
+;
+
+SET IDENTITY_INSERT [Realty].[Users] OFF
+GO
+
+
+SET NOCOUNT ON
+GO 
 SET IDENTITY_INSERT [Realty].[Owners] ON
 GO
 MERGE INTO [Realty].[Owners] AS Target

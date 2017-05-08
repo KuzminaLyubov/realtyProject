@@ -1,32 +1,38 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using RealtyApp.Models;
+using System.Data.Entity;
 
 namespace RealtyApp
 {
     /// <summary>
     /// Interaction logic for LoginWindow.xaml
     /// </summary>
-    public partial class LoginWindow : Window {
-
+    public partial class LoginWindow : Window
+    {
         public enum LoginRegime
         {
-          Exit,
-          ReadOnly,
-          Admin
+            Exit,
+            ReadOnly,
+            Admin
         }
 
         public LoginRegime Regime { get; set; } = LoginRegime.Exit;
 
-        public LoginWindow()
+        private RealtyDatabaseEntities _realtyDatabase;
+
+        public LoginWindow(RealtyDatabaseEntities realtyDatabase)
         {
             InitializeComponent();
             // При загрузке страницы передаем фокус первому текстбоксу, чтобы
             // сразу можно было вводить имя пользователя
             _textBoxLogin.Focus();
             _labelError.Visibility = Visibility.Hidden;
+            _realtyDatabase = realtyDatabase;
         }
 
         private string CalculateHash(string password)
@@ -36,13 +42,30 @@ namespace RealtyApp
             return Convert.ToBase64String(hash);
         }
 
-        private void buttonLogin_Click(object sender, RoutedEventArgs e) {
+        private async void RealtyLogin_Loaded(object sender, RoutedEventArgs e)
+        {
+            await _realtyDatabase.Users.LoadAsync();
+        }
 
+        private bool AdminLoginSuccessful()
+        {
             // Хэш зарегистрированного пользователя должен браться из хранилища
             // данных программы
-            var hash = CalculateHash("qwerty");
+            var hashFromDb = _realtyDatabase.Users.Local
+                .Where(user => user.Login == _textBoxLogin.Text)
+                .Select(user => Convert.ToBase64String(user.Password))
+                .SingleOrDefault();
 
-            if (_textBoxLogin.Text == "lyubov" && CalculateHash(_passwordBox.Password) == hash)
+            if (hashFromDb == null)
+                return false;
+
+            return CalculateHash(_passwordBox.Password) == hashFromDb;
+        }
+
+        private void buttonLogin_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (AdminLoginSuccessful())
             {
                 Regime = LoginRegime.Admin;
                 _labelError.Visibility = Visibility.Hidden;
@@ -68,5 +91,6 @@ namespace RealtyApp
             Regime = LoginRegime.ReadOnly;
             Close();
         }
+
     }
 }

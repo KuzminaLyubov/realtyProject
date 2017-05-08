@@ -1,0 +1,7 @@
+﻿CREATE TABLE [Realty].[Users]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
+    [FullName] NVARCHAR(50) NOT NULL, 
+    [Login] NVARCHAR(50) NOT NULL,
+	[Password] BINARY (16) NOT NULL
+)
