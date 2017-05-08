@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RealtyApp"
-        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="RealtyLogin" x:Class="RealtyApp.LoginWindow"
+        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="LoginWindow" x:Class="RealtyApp.LoginWindow"
         mc:Ignorable="d"
-        Title="Вход в систему" Height="2400" Width="320" MinWidth="320" MinHeight="240" MaxWidth="320" MaxHeight="240" PreviewKeyDown="Page_PreviewKeyDown" Loaded="RealtyLogin_Loaded">
-
+        Title="Вход в систему" Height="240" Width="320" MinWidth="320" MinHeight="240" MaxWidth="320" MaxHeight="240" 
+        PreviewKeyDown="Page_PreviewKeyDown" Loaded="RealtyLogin_Loaded">
     <Grid>
+        <Label x:Name="_labelError" Content="Неверный логин или пароль" Margin="56,2,76,0" 
+            VerticalAlignment="Top" Width="180" Height="25" HorizontalAlignment="Center" Visibility="Visible" FontWeight="Bold"/>
         <Label x:Name="_labelLogin" Content="Логин администратора:" Margin="10,20,10,0" 
             VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
         <TextBox x:Name="_textBoxLogin" Height="25" Margin="10,45,10,0" 
@@ -16,13 +18,9 @@
         <Label x:Name="_labelPassword" Content="Пароль администратора:" Margin="10,71,10,0" 
             VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
         <PasswordBox x:Name="_passwordBox" Margin="10,96,10,0" VerticalAlignment="Top" Height="25"/>
-        <Label x:Name="_labelError" Content="Неверный логин или пароль" Margin="56,2,76,0" 
-            VerticalAlignment="Top" Width="180" Height="25" HorizontalAlignment="Center" Visibility="Visible" FontWeight="Bold"/>
         <Button x:Name="_buttonLogin" Content="Вход"  Margin="10 130 10 0" 
                 VerticalAlignment="Top" Width="120" Height="25" HorizontalAlignment="Center" Click="buttonLogin_Click"/>
         <Button x:Name="_buttonReadonly" Content="В режиме чтения"  Margin="10 170 10 0" 
                 VerticalAlignment="Top" Width="120" Height="25" HorizontalAlignment="Center" Click="_buttonReadonly_Click"/>
-
-
     </Grid>
 </Window>

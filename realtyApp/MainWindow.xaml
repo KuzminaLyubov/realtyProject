@@ -4,13 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RealtyApp"
-        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="Realty" x:Class="RealtyApp.MainWindow"
+        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="MainWindow" x:Class="RealtyApp.MainWindow"
         mc:Ignorable="d"
-        Title="Realty" Height="480" Width="640" MinWidth="320" MinHeight="240" Loaded="Realty_Loaded">
+        Title="Объекты недвижимости" Height="480" Width="640" MinWidth="320" MinHeight="240" Loaded="Realty_Loaded">
     <Window.Resources>
         <CollectionViewSource x:Key="realEstateViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:RealEstate}, CreateList=True}"/>
     </Window.Resources>
-
     <Grid>
         <DockPanel LastChildFill="True">
             <GroupBox DockPanel.Dock="Top" Header="Поиск" Padding="5">
@@ -27,5 +26,4 @@
             </DockPanel>
         </DockPanel>
     </Grid>
-
 </Window>
