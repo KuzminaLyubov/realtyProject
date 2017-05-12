@@ -14,11 +14,11 @@ namespace RealtyApp
     {
         RealtyDatabaseEntities _realtyDatabase = new RealtyDatabaseEntities();
 
-        bool IsReadOnlyMode { get; set; }
-
         public MainWindow()
         {
             InitializeComponent();
+            _buttonAdd.Visibility = Visibility.Hidden;
+            _buttonDelete.Visibility = Visibility.Hidden;
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -26,6 +26,8 @@ namespace RealtyApp
             base.OnClosing(e);
             _realtyDatabase.Dispose();
         }
+
+
 
         private async void Realty_Loaded(object sender, RoutedEventArgs e)
         {
@@ -42,6 +44,12 @@ namespace RealtyApp
             {
                 Close();
                 return;
+            }
+
+            if (loginWindow.Regime == LoginWindow.LoginRegime.Admin)
+            {
+                _buttonDelete.Visibility = Visibility.Visible;
+                _buttonAdd.Visibility = Visibility.Visible;
             }
 
             // LoadAsync - asynchronous call without blocking the window thread
