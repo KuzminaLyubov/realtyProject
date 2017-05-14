@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using RealtyApp.Models;
+using System.Linq;
 
 namespace RealtyApp
 {
@@ -78,7 +79,6 @@ namespace RealtyApp
                 return;
             }
 
-
             _realEstate.Title = _textBoxTitle.Text;
             _realEstate.Address = _textBoxAddress.Text;
             _realEstate.Price = price;
@@ -90,7 +90,7 @@ namespace RealtyApp
 
         private void RealEstateWindowName_Loaded(object sender, RoutedEventArgs e)
         {
-            _comboBoxOwner.ItemsSource = _realtyDatabase.Owners.Local;
+            _comboBoxOwner.ItemsSource = _realtyDatabase.Owners.Local.OrderBy(owner => owner.FullName);
             _comboBoxOwner.SelectedItem = _realEstate.Owner;
             _textBoxTitle.Text = _realEstate.Title;
             _textBoxAddress.Text = _realEstate.Address;

@@ -5,13 +5,13 @@ using RealtyApp.Models;
 namespace RealtyApp
 {
     /// <summary>
-    /// Interaction logic for NewOwnerWindow.xaml
+    /// Interaction logic for RealEstateOwnerWindow.xaml
     /// </summary>
-    public partial class OwnerWindow : Window
+    public partial class RealEstateOwnerWindow : Window
     {
         private Owner _owner;
 
-        public OwnerWindow()
+        public RealEstateOwnerWindow()
         {
             InitializeComponent();
 
@@ -48,13 +48,17 @@ namespace RealtyApp
                 return;
             }
 
-            _owner = new Owner
-            {
-                FullName = _textBoxFullName.Text,
-                PhoneNumber = _textBoxPhoneNumber.Text
-            };
+
+           _owner.FullName = _textBoxFullName.Text;
+           _owner.PhoneNumber = _textBoxPhoneNumber.Text;
             
             DialogResult = true;
+        }
+
+        private void RealEstateOwnerWindowName_Loaded(object sender, RoutedEventArgs e)
+        {
+            _textBoxFullName.Text = _owner.FullName;
+            _textBoxPhoneNumber.Text = _owner.PhoneNumber;
         }
     }
 }

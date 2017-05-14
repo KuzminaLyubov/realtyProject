@@ -20,6 +20,10 @@ namespace RealtyApp
             _buttonAdd.Visibility = Visibility.Hidden;
             _buttonDelete.Visibility = Visibility.Hidden;
             _buttonEdit.Visibility = Visibility.Hidden;
+            _buttonEditOwner.Visibility = Visibility.Hidden;
+            _buttonDeleteOwner.Visibility = Visibility.Hidden;
+            _buttonAddOwner.Visibility = Visibility.Hidden;
+
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -52,6 +56,9 @@ namespace RealtyApp
                 _buttonDelete.Visibility = Visibility.Visible;
                 _buttonAdd.Visibility = Visibility.Visible;
                 _buttonEdit.Visibility = Visibility.Visible;
+                _buttonAddOwner.Visibility = Visibility.Visible;
+                _buttonDeleteOwner.Visibility = Visibility.Visible;
+                _buttonEditOwner.Visibility = Visibility.Visible;
             }
 
             // LoadAsync - asynchronous call without blocking the window thread
@@ -59,20 +66,20 @@ namespace RealtyApp
 
             // After the data is loaded call the DbSet<T>.Local property 
             // to use the DbSet<T> as a binding source.
-            realEstateViewSource.Source = _realtyDatabase.RealEstates.Local;
+            realEstateViewSource.Source = _realtyDatabase.RealEstates.Local.OrderBy(realEstate => realEstate.Address);
 
             // LoadAsync - asynchronous call without blocking the window thread
             await _realtyDatabase.Owners.LoadAsync();
 
         }
 
-        private void RefreshListBox(RealEstate realEstate)
+        private void RefreshListBox()
         {
             _realtyListBox.ItemsSource = null;
             _realtyListBox.ItemsSource = _realtyDatabase.RealEstates.Local;
 
             _realtyListBox.SelectedItem = null;
-            _realtyListBox.SelectedItem = realEstate;
+            _realtyListBox.SelectedItem = (RealEstate)_realtyListBox.SelectedItem;
 
         }
 
@@ -86,7 +93,7 @@ namespace RealtyApp
         private void _searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (string.IsNullOrEmpty(_searchTextBox.Text.Trim()))
-                RefreshListBox(null);
+                RefreshListBox();
             else
                 Search();
         }
@@ -99,7 +106,8 @@ namespace RealtyApp
             {
                 _realtyDatabase.RealEstates.Add(window.RealEstate);
                 SaveData();
-                RefreshListBox(window.RealEstate);
+                _realtyListBox.SelectedItem = window.RealEstate;
+                RefreshListBox();
 
             }
         }
@@ -114,9 +122,8 @@ namespace RealtyApp
             if (window.ShowDialog().Value)
             {
                 SaveData();
-                RefreshListBox(window.RealEstate);
-                _realtyListBox.SelectedItem = null;
                 _realtyListBox.SelectedItem = window.RealEstate;
+                RefreshListBox();
             }
         }
 
@@ -125,15 +132,15 @@ namespace RealtyApp
             if (_realtyListBox.SelectedIndex != -1)
             {
                 MessageBoxResult result = MessageBox.Show(
-                    $"Вы действительно хотите удалить \"{_realtyListBox.SelectedItem}\"?", 
-                    "Внимание!", 
+                    $"Вы действительно хотите удалить \"{_realtyListBox.SelectedItem}\"?",
+                    "Внимание!",
                     MessageBoxButton.YesNo);
 
                 if (result == MessageBoxResult.Yes)
                 {
                     _realtyDatabase.RealEstates.Local.RemoveAt(_realtyListBox.SelectedIndex);
                     SaveData();
-                    RefreshListBox(null);
+                    RefreshListBox();
                 }
             }
         }
@@ -163,7 +170,76 @@ namespace RealtyApp
             await _realtyDatabase.SaveChangesAsync();
         }
 
+        private void _buttonAddOwner_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new RealEstateOwnerWindow();
+            window.RealEstateOwner = new Owner();
+            if (window.ShowDialog().Value)
+            {
+                _realtyDatabase.Owners.Add(window.RealEstateOwner);
+                SaveData();
+                RefreshListBox();
 
+            }
+        }
+
+        private void _buttonEditOwner_Click(object sender, RoutedEventArgs e)
+        {
+            if (_realtyListBox.SelectedIndex == -1)
+                return;
+
+            var window = new RealEstateOwnerWindow();
+            RealEstate realEstate = (RealEstate)_realtyListBox.SelectedItem;
+            window.RealEstateOwner = realEstate.Owner;
+            if (window.ShowDialog().Value)
+            {
+                SaveData();
+                RefreshListBox();
+            }
+        }
+
+        private void _buttonDeleteOwner_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (_realtyListBox.SelectedIndex != -1)
+            {
+                RealEstate realEstate = (RealEstate)_realtyListBox.SelectedItem;
+
+                MessageBoxResult result = MessageBox.Show(
+                    $"Вы действительно хотите удалить владельца \"{realEstate.Owner}\"?",
+                    "Внимание!",
+                    MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+
+                    if (realEstate.Owner.RealEstates.Any())
+                    {
+                        MessageBoxResult result2 = MessageBox.Show(
+                        $"У выбранного владельца есть объект(ы) недвижимости. Удалить всё?",
+                        "Внимание!",
+                        MessageBoxButton.YesNo);
+
+                        if (result2 == MessageBoxResult.Yes)
+                        {
+                            foreach (var r in realEstate.Owner.RealEstates.Reverse())
+                            {
+                                _realtyDatabase.RealEstates.Local.Remove(r);
+                            }
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+
+                    _realtyDatabase.Owners.Local.Remove(realEstate.Owner);
+                    SaveData();
+                    RefreshListBox();
+
+                }
+            }
+        }
     }
 }
 

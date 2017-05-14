@@ -1,0 +1,25 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RealtyApp"
+        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="RealEstateOwnerWindowName" x:Class="RealtyApp.RealEstateOwnerWindow"
+        mc:Ignorable="d"
+        Title="Новый владелец недвижимости" Height="240" Width="320" MinWidth="320" MinHeight="240" MaxWidth="320" MaxHeight="240" ResizeMode="NoResize" Loaded="RealEstateOwnerWindowName_Loaded">
+    <Grid>
+        <StackPanel Margin="10 10 10 10">
+            <Label x:Name="_labelError" Content="Ошибка"  
+            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible" FontWeight="Bold"/>
+            <Label x:Name="_labelFullName" Content="ФИО владельца:"  
+            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
+            <TextBox x:Name="_textBoxFullName" Height="25" 
+                 TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+            <Label x:Name="_labelPhoneNumber" Content="Мобильный телефон владельца:"
+            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
+            <TextBox x:Name="_textBoxPhoneNumber"  VerticalAlignment="Top" Height="25"/>
+            <Button x:Name="_buttonAdd" Content="Добавить"  
+                VerticalAlignment="Top" Width="120" Height="25" Margin="5 5 5 5" HorizontalAlignment="Center" Click="_buttonAdd_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
