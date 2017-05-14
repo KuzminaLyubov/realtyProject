@@ -19,6 +19,7 @@ namespace RealtyApp
             InitializeComponent();
             _buttonAdd.Visibility = Visibility.Hidden;
             _buttonDelete.Visibility = Visibility.Hidden;
+            _buttonEdit.Visibility = Visibility.Hidden;
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -50,6 +51,7 @@ namespace RealtyApp
             {
                 _buttonDelete.Visibility = Visibility.Visible;
                 _buttonAdd.Visibility = Visibility.Visible;
+                _buttonEdit.Visibility = Visibility.Visible;
             }
 
             // LoadAsync - asynchronous call without blocking the window thread
@@ -59,14 +61,19 @@ namespace RealtyApp
             // to use the DbSet<T> as a binding source.
             realEstateViewSource.Source = _realtyDatabase.RealEstates.Local;
 
+            // LoadAsync - asynchronous call without blocking the window thread
             await _realtyDatabase.Owners.LoadAsync();
 
         }
 
-        private void RefreshListBox()
+        private void RefreshListBox(RealEstate realEstate)
         {
             _realtyListBox.ItemsSource = null;
             _realtyListBox.ItemsSource = _realtyDatabase.RealEstates.Local;
+
+            _realtyListBox.SelectedItem = null;
+            _realtyListBox.SelectedItem = realEstate;
+
         }
 
         private void Search()
@@ -79,7 +86,7 @@ namespace RealtyApp
         private void _searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (string.IsNullOrEmpty(_searchTextBox.Text.Trim()))
-                RefreshListBox();
+                RefreshListBox(null);
             else
                 Search();
         }
@@ -87,11 +94,29 @@ namespace RealtyApp
         private void _buttonAdd_Click(object sender, RoutedEventArgs e)
         {
             var window = new RealEstateWindow(_realtyDatabase);
+            window.RealEstate = new RealEstate();
             if (window.ShowDialog().Value)
             {
                 _realtyDatabase.RealEstates.Add(window.RealEstate);
                 SaveData();
-                RefreshListBox();
+                RefreshListBox(window.RealEstate);
+
+            }
+        }
+
+        private void _buttonEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (_realtyListBox.SelectedIndex == -1)
+                return;
+
+            var window = new RealEstateWindow(_realtyDatabase);
+            window.RealEstate = (RealEstate)_realtyListBox.SelectedItem;
+            if (window.ShowDialog().Value)
+            {
+                SaveData();
+                RefreshListBox(window.RealEstate);
+                _realtyListBox.SelectedItem = null;
+                _realtyListBox.SelectedItem = window.RealEstate;
             }
         }
 
@@ -99,22 +124,45 @@ namespace RealtyApp
         {
             if (_realtyListBox.SelectedIndex != -1)
             {
-                _realtyDatabase.RealEstates.Local.RemoveAt(_realtyListBox.SelectedIndex);
-                SaveData();
-                RefreshListBox();
+                MessageBoxResult result = MessageBox.Show(
+                    $"Вы действительно хотите удалить \"{_realtyListBox.SelectedItem}\"?", 
+                    "Внимание!", 
+                    MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    _realtyDatabase.RealEstates.Local.RemoveAt(_realtyListBox.SelectedIndex);
+                    SaveData();
+                    RefreshListBox(null);
+                }
             }
         }
 
         private void _realtyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // If selected index = -1, we set IsEnabled to false
-            _buttonDelete.IsEnabled = _realtyListBox.SelectedIndex != -1;
+            RealEstate selectedRealEstate;
+
+            if (_realtyListBox.SelectedIndex == -1)
+            {
+                selectedRealEstate = new RealEstate { Owner = new Owner() };
+            }
+            else
+            {
+                selectedRealEstate = (RealEstate)_realtyListBox.SelectedItem;
+            }
+
+            _textBlockTitle.Text = selectedRealEstate.Title;
+            _textBlockAddress.Text = selectedRealEstate.Address;
+            _textBlockPrice.Text = selectedRealEstate.Price.ToString();
+            _textBlockFullName.Text = selectedRealEstate.Owner.FullName;
+            _textBlockPhoneNumber.Text = selectedRealEstate.Owner.PhoneNumber;
         }
 
-        private void SaveData()
+        private async void SaveData()
         {
-            _realtyDatabase.SaveChangesAsync();
+            await _realtyDatabase.SaveChangesAsync();
         }
+
 
     }
 }

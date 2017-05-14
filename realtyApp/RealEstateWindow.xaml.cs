@@ -68,17 +68,16 @@ namespace RealtyApp
             }
 
             if (_comboBoxOwner.SelectedItem == null) {
-                MessageBox.Show("Необходимо выбрать факультет");
+                MessageBox.Show("Необходимо выбрать ");
                 _comboBoxOwner.Focus();
                 return;
             }
 
-            _realEstate = new RealEstate {
-                Title = _textBoxTitle.Text,
-                Address = _textBoxAddress.Text,
-                Price = price,
-                Owner = _comboBoxOwner.SelectedItem as Owner
-            };
+
+            _realEstate.Title = _textBoxTitle.Text;
+            _realEstate.Address = _textBoxAddress.Text;
+            _realEstate.Price = price;
+            _realEstate.Owner = _comboBoxOwner.SelectedItem as Owner;
 
             // Close current window
             DialogResult = true;
@@ -87,6 +86,10 @@ namespace RealtyApp
         private void RealEstateWindowName_Loaded(object sender, RoutedEventArgs e)
         {
             _comboBoxOwner.ItemsSource = _realtyDatabase.Owners.Local;
+            _comboBoxOwner.SelectedItem = _realEstate.Owner;
+            _textBoxTitle.Text = _realEstate.Title;
+            _textBoxAddress.Text = _realEstate.Address;
+            _textBoxPrice.Text = _realEstate.Price.ToString();
         }
 
     }

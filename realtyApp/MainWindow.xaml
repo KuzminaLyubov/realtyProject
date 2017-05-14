@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RealtyApp"
         xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="MainWindowName" x:Class="RealtyApp.MainWindow"
         mc:Ignorable="d"
-        Title="Объекты недвижимости" Height="480" Width="640" MinWidth="320" MinHeight="240" Loaded="Realty_Loaded">
+        Title="Объекты недвижимости" Height="480" Width="640" MinWidth="640" MinHeight="480" Loaded="Realty_Loaded">
     <Window.Resources>
         <CollectionViewSource x:Key="realEstateViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:RealEstate}, CreateList=True}"/>
     </Window.Resources>
@@ -19,19 +19,40 @@
                 </DockPanel>
             </GroupBox>
             <DockPanel DockPanel.Dock="Left">
-                <StackPanel DockPanel.Dock="Left" DataContext="{StaticResource realEstateViewSource}">
-                    <TextBlock FontWeight="Bold" Text="Список объектов недвижимости" />
-                    <ListBox x:Name="_realtyListBox" Height="300" Width="200" 
+                <GroupBox Header="Список объектов недвижимости" FontWeight="Bold">
+                    <ListBox x:Name="_realtyListBox"  FontWeight="Normal"
+                             DataContext="{StaticResource realEstateViewSource}"
                              SelectedValuePath="Address" ItemsSource="{Binding}" 
                              DisplayMemberPath="Address" 
                              SelectionChanged="_realtyListBox_SelectionChanged"/>
-                    <Button x:Name="_buttonAdd" Content="Добавить" Margin="10 10 10 0" 
-                        VerticalAlignment="Top" Width="120" Height="25" HorizontalAlignment="Center" Click="_buttonAdd_Click"/>
-                    <Button x:Name="_buttonDelete" Content="Удалить"  Margin="10 10 10 0"
-                        VerticalAlignment="Top" Width="120" Height="25" HorizontalAlignment="Center" Click="_buttonDelete_Click"/>
-                </StackPanel>
+                </GroupBox>
             </DockPanel>
-            <DockPanel></DockPanel>
+            <GridSplitter />
+            <DockPanel DockPanel.Dock="Top">
+                <GroupBox Header="Объект недвижимости" FontWeight="Bold">
+                    <StackPanel>
+                        <Label x:Name="_labelTitle" Content="Название объекта недвижимости:" FontWeight="Bold"/>
+                        <TextBlock x:Name="_textBlockTitle" Height="20" FontWeight="Normal"/>
+                        <Label x:Name="_labelAddress" Content="Адрес объекта недвижимости:" FontWeight="Bold" />
+                        <TextBlock x:Name="_textBlockAddress" Height="20" FontWeight="Normal"/>
+                        <Label x:Name="_labelPrice" Content="Стоимость (руб):" FontWeight="Bold"/>
+                        <TextBlock x:Name="_textBlockPrice" Height="20" FontWeight="Normal"/>
+                        <Label x:Name="_labelOwner" Content="Владелец объекта недвижимости:" FontWeight="Bold"/>
+                        <TextBlock x:Name="_textBlockFullName" Height="20" FontWeight="Normal"/>
+                        <Label x:Name="_labelPhoneNumber" Content="Мобильный телефон владельца:" FontWeight="Bold"/>
+                        <TextBlock x:Name="_textBlockPhoneNumber" Height="20" FontWeight="Normal"/>
+                        <DockPanel DockPanel.Dock="Bottom">
+                            <Button x:Name="_buttonAdd" Content="Добавить" Margin="5 0 5 5"
+                        VerticalAlignment="Top" Width="95" Height="25" HorizontalAlignment="Left" Click="_buttonAdd_Click"/>
+                            <Button x:Name="_buttonEdit" Content="Редактировать"  Margin="5 0 5 5"
+                        VerticalAlignment="Top" Width="95" Height="25" HorizontalAlignment="Left" Click="_buttonEdit_Click"/>
+                            <Button x:Name="_buttonDelete" Content="Удалить"  Margin="5 0 5 5"
+                        VerticalAlignment="Top" Width="95" Height="25" HorizontalAlignment="Left" Click="_buttonDelete_Click"/>
+                        </DockPanel>
+                    </StackPanel>
+                </GroupBox>
+
+            </DockPanel>
         </DockPanel>
     </Grid>
 </Window>
