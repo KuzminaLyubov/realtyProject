@@ -8,26 +8,23 @@
         mc:Ignorable="d"
         Title="Объект недвижимости" Height="320" Width="320" MinWidth="320" MinHeight="320" MaxWidth="320" MaxHeight="320" ResizeMode="NoResize" Loaded="RealEstateWindowName_Loaded">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="73*"/>
-            <ColumnDefinition Width="241*"/>
-        </Grid.ColumnDefinitions>
-        <Label x:Name="_labelError" Content="Ошибка" Margin="11,2,11,0" 
-            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible" FontWeight="Bold" Grid.ColumnSpan="2"/>
-        <Label x:Name="_labelTitle" Content="Название объекта недвижимости:" Margin="11,20,11,0" 
-            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="_textBoxTitle" Height="25" Margin="10,45,10,0" 
-                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <Label x:Name="_labelAddress" Content="Адрес объекта недвижимости:" Margin="11,71,11,0" 
-            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="_textBoxAddress" Margin="10,96,10,0" VerticalAlignment="Top" Height="25" Grid.ColumnSpan="2"/>
-        <Label x:Name="_labelPrice" Content="Стоимость (руб):" Margin="11,126,11,0" 
-            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="_textBoxPrice" Margin="10,151,10,0" VerticalAlignment="Top" Height="25" Grid.ColumnSpan="2"/>
-        <Label x:Name="_labelOwner" Content="Владелец объекта недвижимости:" Margin="11,182,11,0" 
-            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible" Grid.ColumnSpan="2"/>
-        <ComboBox x:Name="_comboBoxOwner" Margin="10,207,10,0" VerticalAlignment="Top" Height="25" Grid.ColumnSpan="2"/>
-        <Button x:Name="_buttonAdd" Content="Сохранить"  Margin="24,251,97,0" 
-                VerticalAlignment="Top" Width="120" Height="25" HorizontalAlignment="Center" Click="_buttonAdd_Click" Grid.Column="1"/>
+        <StackPanel Margin="10 10 10 10">
+            <Label x:Name="_labelError" Content="Ошибка" VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible" FontWeight="Bold"/>
+        <Label x:Name="_labelTitle" Content="Название объекта недвижимости:" 
+            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible" />
+        <TextBox x:Name="_textBoxTitle" Height="25" 
+                 TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <Label x:Name="_labelAddress" Content="Адрес объекта недвижимости:"
+            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
+        <TextBox x:Name="_textBoxAddress" VerticalAlignment="Top" Height="25"/>
+        <Label x:Name="_labelPrice" Content="Стоимость (руб):" 
+            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
+        <TextBox x:Name="_textBoxPrice" VerticalAlignment="Top" Height="25"/>
+        <Label x:Name="_labelOwner" Content="Владелец объекта недвижимости:"
+            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
+        <ComboBox x:Name="_comboBoxOwner"  VerticalAlignment="Top" Height="25"/>
+        <Button x:Name="_buttonAdd" Content="Сохранить" Margin="10 10 10 10"
+                VerticalAlignment="Top" Width="80" Height="25" HorizontalAlignment="Center" Click="_buttonAdd_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

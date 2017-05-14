@@ -54,21 +54,26 @@ namespace RealtyApp
 
             decimal price;
 
-            if (!decimal.TryParse(_textBoxPrice.Text, out price)) {
+            if (!decimal.TryParse(_textBoxPrice.Text, out price))
+            {
                 _labelError.Visibility = Visibility.Visible;
                 _labelError.Content = "Введите стоимость объекта недвижимости";
                 _textBoxPrice.Focus();
                 return;
             }
-            if (price <= 100000) {
+
+            if (price <= 100000)
+            {
                 _labelError.Visibility = Visibility.Visible;
                 _labelError.Content = "Стоимость недвижимости от 100000 руб";
                 _textBoxPrice.Focus();
                 return;
             }
 
-            if (_comboBoxOwner.SelectedItem == null) {
-                MessageBox.Show("Необходимо выбрать ");
+            if (_comboBoxOwner.SelectedItem == null)
+            {
+                _labelError.Visibility = Visibility.Visible;
+                _labelError.Content = "Необходимо выбрать владельца недвижимости";
                 _comboBoxOwner.Focus();
                 return;
             }
