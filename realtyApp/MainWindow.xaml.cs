@@ -6,6 +6,7 @@ using RealtyApp.Models;
 using System.Data.Entity;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.Windows.Media;
 
 namespace RealtyApp
 {
@@ -176,18 +177,15 @@ namespace RealtyApp
             _textBlockFullName.Text = selectedRealEstate.Owner.FullName;
             _textBlockPhoneNumber.Text = selectedRealEstate.Owner.PhoneNumber;
 
-            _dockPanelImages.Children.Clear();
-            foreach (var picture in _realtyDatabase.Pictures.Local)
+            for (int i = _dockPanelImages.Children.Count-1; i >= 0 ; i--)
             {
-                var fileName = @"C:\Temp\" + picture.Name + ".jpg";
+                _dockPanelImages.Children.RemoveAt(i);
+            }
 
-                using (FileStream file = new FileStream(fileName, FileMode.Create))
-                {
-                    file.Write(picture.Content, 0, picture.Content.Count());
-                }
-
+            foreach (var picture in _realtyDatabase.Pictures.Local.Where(image => image.RealEstateId == selectedRealEstate.Id))
+            {
                 _dockPanelImages.Children.Add(new Image {
-                    Source = new BitmapImage(new System.Uri(fileName)),
+                    Source = ByteToImage(picture.Content),
                     Width = 150,
                     Height = 150,
                     Margin = new Thickness (5)});
@@ -199,6 +197,19 @@ namespace RealtyApp
                 Height = 1,
             });
 
+        }
+
+        private static ImageSource ByteToImage(byte[] imageData)
+        {
+            BitmapImage b = new BitmapImage();
+            MemoryStream ms = new MemoryStream(imageData);
+            b.BeginInit();
+            b.StreamSource = ms;
+            b.EndInit();
+
+            ImageSource imgSrc = b as ImageSource;
+
+            return imgSrc;
         }
 
         private void SaveData()
