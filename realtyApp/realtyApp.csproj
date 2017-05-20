@@ -102,11 +102,11 @@
     <Compile Include="Models\Picture.cs">
       <DependentUpon>RealtyModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\RealEstate.Extended.cs" />
-    <Compile Include="Models\Owner.Extended.cs" />
     <Compile Include="Models\RealEstate.cs">
       <DependentUpon>RealtyModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RealEstate.Extended.cs" />
+    <Compile Include="Models\Owner.Extended.cs" />
     <Compile Include="Models\RealtyModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

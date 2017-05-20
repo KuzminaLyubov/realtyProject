@@ -75,7 +75,8 @@ namespace RealtyApp
 
             // After the data is loaded call the DbSet<T>.Local property 
             // to use the DbSet<T> as a binding source.
-            realEstateViewSource.Source = _realtyDatabase.RealEstates.Local.OrderBy(realEstate => realEstate.Address);
+            realEstateViewSource.Source = _realtyDatabase.RealEstates.Local
+                .OrderBy(realEstate => realEstate.Address);
 
         }
 
@@ -145,14 +146,18 @@ namespace RealtyApp
                     MessageBoxButton.YesNo);
 
                 if (result == MessageBoxResult.Yes)
-                {
-                    foreach (var i in realEstate.Pictures.Where(estate => estate.Id == realEstate.Id).Reverse())
+                { 
+                    var pictures = _realtyDatabase.Pictures.Where(image => image.RealEstateId == realEstate.Id);
+                    for (int i = pictures.Count() - 1; i >= 0; i--)
                     {
-                        _realtyDatabase.Pictures.Local.Remove(i);
+                        _realtyDatabase.Pictures.Local.RemoveAt(i);
                     }
-
-                    _realtyDatabase.RealEstates.Local.RemoveAt(_realtyListBox.SelectedIndex);
                     SaveData();
+
+                    _realtyDatabase.RealEstates.Local.Remove(realEstate);
+
+                    SaveData();
+
                     RefreshListBox();
                 }
             }
@@ -212,9 +217,9 @@ namespace RealtyApp
             return imgSrc;
         }
 
-        private void SaveData()
+        private async void SaveData()
         {
-           _realtyDatabase.SaveChanges();
+           await _realtyDatabase.SaveChangesAsync();
         }
 
         private void _buttonAddOwner_Click(object sender, RoutedEventArgs e)
@@ -271,12 +276,14 @@ namespace RealtyApp
                         {
                             foreach (var r in realEstate.Owner.RealEstates.Reverse())
                             {
-                                foreach (var i in realEstate.Pictures.Where(estate => estate.Id == r.Id).Reverse())
+                                var pictures = _realtyDatabase.Pictures.Where(image => image.RealEstateId == r.Id);
+                                for (int i = pictures.Count()-1 ; i >=0; i--)
                                 {
-                                    _realtyDatabase.Pictures.Local.Remove(i);
+                                    _realtyDatabase.Pictures.Local.RemoveAt(i);
                                 }
-
+                                SaveData();
                                 _realtyDatabase.RealEstates.Local.Remove(r);
+                                SaveData();
                             }
                         }
                         else
