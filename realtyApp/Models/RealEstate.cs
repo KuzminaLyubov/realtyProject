@@ -14,6 +14,12 @@ namespace RealtyApp.Models
     
     public partial class RealEstate
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public RealEstate()
+        {
+            this.Pictures = new ObservableCollection<Picture>();
+        }
+    
         public int Id { get; set; }
         public int OwnerID { get; set; }
         public string Title { get; set; }
@@ -21,5 +27,7 @@ namespace RealtyApp.Models
         public decimal Price { get; set; }
     
         public virtual Owner Owner { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ObservableCollection<Picture> Pictures { get; set; }
     }
 }

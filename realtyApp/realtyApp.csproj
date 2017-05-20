@@ -99,6 +99,9 @@
     <Compile Include="Models\Owner.cs">
       <DependentUpon>RealtyModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Picture.cs">
+      <DependentUpon>RealtyModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\RealEstate.Extended.cs" />
     <Compile Include="Models\Owner.Extended.cs" />
     <Compile Include="Models\RealEstate.cs">

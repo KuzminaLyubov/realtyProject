@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿
 using System.Windows;
 using RealtyApp.Models;
 using System.Linq;
+using System.IO;
+using Microsoft.Win32;
+using System.Collections.Generic;
 
 namespace RealtyApp
 {
@@ -90,12 +93,31 @@ namespace RealtyApp
 
         private void RealEstateWindowName_Loaded(object sender, RoutedEventArgs e)
         {
-            _comboBoxOwner.ItemsSource = _realtyDatabase.Owners.Local.OrderBy(owner => owner.FullName);
+             _comboBoxOwner.ItemsSource = _realtyDatabase.Owners.Local.OrderBy(owner => owner.FullName);
             _comboBoxOwner.SelectedItem = _realEstate.Owner;
             _textBoxTitle.Text = _realEstate.Title;
             _textBoxAddress.Text = _realEstate.Address;
             _textBoxPrice.Text = _realEstate.Price.ToString();
         }
 
+        private void _buttonImageAdd_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.Filter = "Images (*.jpg)|*.jpg|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                foreach (string filename in openFileDialog.FileNames)
+                {
+                    _realtyDatabase.Pictures.Add(new Picture
+                    {
+                        Name = Path.GetFileName(filename),
+                        Content = File.ReadAllBytes(filename),
+                        RealEstateId = _realEstate.Id
+                    });
+                }
+            }
+
+        }
     }
 }

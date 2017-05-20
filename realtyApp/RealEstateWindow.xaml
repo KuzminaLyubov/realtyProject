@@ -23,8 +23,12 @@
         <Label x:Name="_labelOwner" Content="Владелец объекта недвижимости:"
             VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
         <ComboBox x:Name="_comboBoxOwner"  VerticalAlignment="Top" Height="25"/>
+            <DockPanel>
         <Button x:Name="_buttonAdd" Content="Сохранить" Margin="10 10 10 10"
                 VerticalAlignment="Top" Width="80" Height="25" HorizontalAlignment="Center" Click="_buttonAdd_Click"/>
+        <Button x:Name="_buttonImageAdd" Content="Загрузить картинку" Margin="10 10 10 10"
+                VerticalAlignment="Top" Width="150" Height="25" HorizontalAlignment="Center" Click="_buttonImageAdd_Click"/>
+            </DockPanel>
         </StackPanel>
     </Grid>
 </Window>

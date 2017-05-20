@@ -28,8 +28,7 @@
             <StackPanel DockPanel.Dock="Right">
                 <GroupBox Header="Объект недвижимости" FontWeight="Bold">
                     <StackPanel>
-                        <DockPanel x:Name="_dockPanelImages" >
-                        </DockPanel>
+                        <DockPanel x:Name="_dockPanelImages" ScrollViewer.HorizontalScrollBarVisibility="Auto"></DockPanel>
                         <Label x:Name="_labelTitle" Content="Название:" FontWeight="Bold"/>
                         <TextBlock x:Name="_textBlockTitle" Height="20" FontWeight="Normal"/>
                         <Label x:Name="_labelAddress" Content="Адрес объекта недвижимости:" FontWeight="Bold" />

@@ -70,6 +70,7 @@
     <Build Include="Tables\Realty.Owners.sql" />
     <Build Include="Schemas\Realty.sql" />
     <Build Include="Tables\Realty.Users.sql" />
+    <Build Include="Tables\Realty.Images.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />

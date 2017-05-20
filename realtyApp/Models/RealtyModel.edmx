@@ -13,6 +13,15 @@
           <Property Name="FullName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Pictures">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Content" Type="varbinary(max)" Nullable="false" />
+          <Property Name="RealEstateId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="RealEstates">
           <Key>
             <PropertyRef Name="Id" />
@@ -32,6 +41,18 @@
           <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="HashedPassword" Type="binary" MaxLength="16" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Pictures_RealEstates">
+          <End Role="RealEstates" Type="Self.RealEstates" Multiplicity="1" />
+          <End Role="Pictures" Type="Self.Pictures" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RealEstates">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Pictures">
+              <PropertyRef Name="RealEstateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RealEstates_Owners">
           <End Role="Owners" Type="Self.Owners" Multiplicity="1" />
           <End Role="RealEstates" Type="Self.RealEstates" Multiplicity="*" />
@@ -46,8 +67,13 @@
         </Association>
         <EntityContainer Name="RealtyDatabaseModelStoreContainer">
           <EntitySet Name="Owners" EntityType="Self.Owners" Schema="Realty" store:Type="Tables" />
+          <EntitySet Name="Pictures" EntityType="Self.Pictures" Schema="Realty" store:Type="Tables" />
           <EntitySet Name="RealEstates" EntityType="Self.RealEstates" Schema="Realty" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="Realty" store:Type="Tables" />
+          <AssociationSet Name="FK_Pictures_RealEstates" Association="Self.FK_Pictures_RealEstates">
+            <End Role="RealEstates" EntitySet="RealEstates" />
+            <End Role="Pictures" EntitySet="Pictures" />
+          </AssociationSet>
           <AssociationSet Name="FK_RealEstates_Owners" Association="Self.FK_RealEstates_Owners">
             <End Role="Owners" EntitySet="Owners" />
             <End Role="RealEstates" EntitySet="RealEstates" />
@@ -76,6 +102,7 @@
           <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <NavigationProperty Name="Owner" Relationship="Self.FK_RealEstates_Owners" FromRole="RealEstates" ToRole="Owners" />
+          <NavigationProperty Name="Pictures" Relationship="RealtyDatabaseModel.FK_Pictures_RealEstates" FromRole="RealEstate" ToRole="Picture" />
         </EntityType>
         <Association Name="FK_RealEstates_Owners">
           <End Role="Owners" Type="Self.Owner" Multiplicity="1" />
@@ -97,6 +124,11 @@
             <End Role="RealEstates" EntitySet="RealEstates" />
           </AssociationSet>
           <EntitySet Name="Users" EntityType="RealtyDatabaseModel.User" />
+          <EntitySet Name="Pictures" EntityType="RealtyDatabaseModel.Picture" />
+          <AssociationSet Name="FK_Pictures_RealEstates" Association="RealtyDatabaseModel.FK_Pictures_RealEstates">
+            <End Role="RealEstate" EntitySet="RealEstates" />
+            <End Role="Picture" EntitySet="Pictures" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Key>
@@ -107,6 +139,28 @@
           <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="HashedPassword" Type="Binary" Nullable="false" MaxLength="16" FixedLength="true" />
         </EntityType>
+        <EntityType Name="Picture">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="RealEstateId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RealEstate" Relationship="RealtyDatabaseModel.FK_Pictures_RealEstates" FromRole="Picture" ToRole="RealEstate" />
+        </EntityType>
+        <Association Name="FK_Pictures_RealEstates">
+          <End Type="RealtyDatabaseModel.RealEstate" Role="RealEstate" Multiplicity="1" />
+          <End Type="RealtyDatabaseModel.Picture" Role="Picture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RealEstate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Picture">
+              <PropertyRef Name="RealEstateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -139,6 +193,16 @@
                 <ScalarProperty Name="HashedPassword" ColumnName="HashedPassword" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pictures">
+            <EntityTypeMapping TypeName="RealtyDatabaseModel.Picture">
+              <MappingFragment StoreEntitySet="Pictures">
+                <ScalarProperty Name="RealEstateId" ColumnName="RealEstateId" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

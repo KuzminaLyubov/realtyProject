@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using RealtyApp.Models;
 using System.Data.Entity;
+using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace RealtyApp
 {
@@ -64,12 +66,15 @@ namespace RealtyApp
             // LoadAsync - asynchronous call without blocking the window thread
             await _realtyDatabase.RealEstates.LoadAsync();
 
+            // LoadAsync - asynchronous call without blocking the window thread
+            await _realtyDatabase.Owners.LoadAsync();
+
+            // LoadAsync - asynchronous call without blocking the window thread
+            await _realtyDatabase.Pictures.LoadAsync();
+
             // After the data is loaded call the DbSet<T>.Local property 
             // to use the DbSet<T> as a binding source.
             realEstateViewSource.Source = _realtyDatabase.RealEstates.Local.OrderBy(realEstate => realEstate.Address);
-
-            // LoadAsync - asynchronous call without blocking the window thread
-            await _realtyDatabase.Owners.LoadAsync();
 
         }
 
@@ -131,13 +136,20 @@ namespace RealtyApp
         {
             if (_realtyListBox.SelectedIndex != -1)
             {
+                RealEstate realEstate = (RealEstate)_realtyListBox.SelectedItem;
+
                 MessageBoxResult result = MessageBox.Show(
-                    $"Вы действительно хотите удалить \"{_realtyListBox.SelectedItem}\"?",
+                    $"Вы действительно хотите удалить \"{realEstate}\"?",
                     "Внимание!",
                     MessageBoxButton.YesNo);
 
                 if (result == MessageBoxResult.Yes)
                 {
+                    foreach (var i in realEstate.Pictures.Where(estate => estate.Id == realEstate.Id).Reverse())
+                    {
+                        _realtyDatabase.Pictures.Local.Remove(i);
+                    }
+
                     _realtyDatabase.RealEstates.Local.RemoveAt(_realtyListBox.SelectedIndex);
                     SaveData();
                     RefreshListBox();
@@ -163,11 +175,35 @@ namespace RealtyApp
             _textBlockPrice.Text = selectedRealEstate.Price.ToString();
             _textBlockFullName.Text = selectedRealEstate.Owner.FullName;
             _textBlockPhoneNumber.Text = selectedRealEstate.Owner.PhoneNumber;
+
+            _dockPanelImages.Children.Clear();
+            foreach (var picture in _realtyDatabase.Pictures.Local)
+            {
+                var fileName = @"C:\Temp\" + picture.Name + ".jpg";
+
+                using (FileStream file = new FileStream(fileName, FileMode.Create))
+                {
+                    file.Write(picture.Content, 0, picture.Content.Count());
+                }
+
+                _dockPanelImages.Children.Add(new Image {
+                    Source = new BitmapImage(new System.Uri(fileName)),
+                    Width = 150,
+                    Height = 150,
+                    Margin = new Thickness (5)});
+            }
+
+            _dockPanelImages.Children.Add(new Image
+            {
+                Width = 1,
+                Height = 1,
+            });
+
         }
 
-        private async void SaveData()
+        private void SaveData()
         {
-            await _realtyDatabase.SaveChangesAsync();
+           _realtyDatabase.SaveChanges();
         }
 
         private void _buttonAddOwner_Click(object sender, RoutedEventArgs e)
@@ -224,6 +260,11 @@ namespace RealtyApp
                         {
                             foreach (var r in realEstate.Owner.RealEstates.Reverse())
                             {
+                                foreach (var i in realEstate.Pictures.Where(estate => estate.Id == r.Id).Reverse())
+                                {
+                                    _realtyDatabase.Pictures.Local.Remove(i);
+                                }
+
                                 _realtyDatabase.RealEstates.Local.Remove(r);
                             }
                         }
