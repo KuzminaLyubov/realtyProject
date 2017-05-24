@@ -26,7 +26,7 @@ namespace RealtyApp
             _buttonEditOwner.Visibility = Visibility.Hidden;
             _buttonDeleteOwner.Visibility = Visibility.Hidden;
             _buttonAddOwner.Visibility = Visibility.Hidden;
-
+            _buttonDeleteImages.Visibility = Visibility.Hidden;
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -62,6 +62,7 @@ namespace RealtyApp
                 _buttonAddOwner.Visibility = Visibility.Visible;
                 _buttonDeleteOwner.Visibility = Visibility.Visible;
                 _buttonEditOwner.Visibility = Visibility.Visible;
+                _buttonDeleteImages.Visibility = Visibility.Visible;
             }
 
             // LoadAsync - asynchronous call without blocking the window thread
@@ -82,11 +83,12 @@ namespace RealtyApp
 
         private void RefreshListBox()
         {
+            var selectedItem = (RealEstate)_realtyListBox.SelectedItem;
             _realtyListBox.ItemsSource = null;
             _realtyListBox.ItemsSource = _realtyDatabase.RealEstates.Local;
 
             _realtyListBox.SelectedItem = null;
-            _realtyListBox.SelectedItem = (RealEstate)_realtyListBox.SelectedItem;
+            _realtyListBox.SelectedItem = selectedItem;
 
         }
 
@@ -146,13 +148,11 @@ namespace RealtyApp
                     MessageBoxButton.YesNo);
 
                 if (result == MessageBoxResult.Yes)
-                { 
-                    var pictures = _realtyDatabase.Pictures.Where(image => image.RealEstateId == realEstate.Id);
-                    for (int i = pictures.Count() - 1; i >= 0; i--)
+                {
+                    foreach (var p in _realtyDatabase.Pictures.Local.Where(image => image.RealEstateId == realEstate.Id).Reverse())
                     {
-                        _realtyDatabase.Pictures.Local.RemoveAt(i);
+                        _realtyDatabase.Pictures.Local.Remove(p);
                     }
-                    SaveData();
 
                     _realtyDatabase.RealEstates.Local.Remove(realEstate);
 
@@ -182,26 +182,22 @@ namespace RealtyApp
             _textBlockFullName.Text = selectedRealEstate.Owner.FullName;
             _textBlockPhoneNumber.Text = selectedRealEstate.Owner.PhoneNumber;
 
-            for (int i = _dockPanelImages.Children.Count-1; i >= 0 ; i--)
+            for (int i = _dockPanelImages.Children.Count - 1; i >= 0; i--)
             {
                 _dockPanelImages.Children.RemoveAt(i);
             }
 
             foreach (var picture in _realtyDatabase.Pictures.Local.Where(image => image.RealEstateId == selectedRealEstate.Id))
             {
-                _dockPanelImages.Children.Add(new Image {
+                _dockPanelImages.Children.Add(new Image
+                {
                     Source = ByteToImage(picture.Content),
                     Width = 150,
                     Height = 150,
-                    Margin = new Thickness (5)});
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(5)
+                });
             }
-
-            _dockPanelImages.Children.Add(new Image
-            {
-                Width = 1,
-                Height = 1,
-            });
-
         }
 
         private static ImageSource ByteToImage(byte[] imageData)
@@ -219,7 +215,7 @@ namespace RealtyApp
 
         private async void SaveData()
         {
-           await _realtyDatabase.SaveChangesAsync();
+            await _realtyDatabase.SaveChangesAsync();
         }
 
         private void _buttonAddOwner_Click(object sender, RoutedEventArgs e)
@@ -272,28 +268,61 @@ namespace RealtyApp
                         "Внимание!",
                         MessageBoxButton.YesNo);
 
-                        if (result2 == MessageBoxResult.Yes)
-                        {
-                            foreach (var r in realEstate.Owner.RealEstates.Reverse())
-                            {
-                                var pictures = _realtyDatabase.Pictures.Where(image => image.RealEstateId == r.Id);
-                                for (int i = pictures.Count()-1 ; i >=0; i--)
-                                {
-                                    _realtyDatabase.Pictures.Local.RemoveAt(i);
-                                }
-                                SaveData();
-                                _realtyDatabase.RealEstates.Local.Remove(r);
-                                SaveData();
-                            }
-                        }
-                        else
+                        if (result2 != MessageBoxResult.Yes)
                         {
                             return;
                         }
+
+                        foreach (var r in _realtyDatabase.RealEstates.Local.Where(r => r.OwnerID == realEstate.Owner.Id).Reverse())
+                        {
+                            // удаляем сначала все изображения недвижимости
+                            foreach (var p in _realtyDatabase.Pictures.Local.Where(image => image.RealEstateId == r.Id).Reverse())
+                            {
+                                _realtyDatabase.Pictures.Local.Remove(p);
+                            }
+
+                            // затем саму недвижимость
+                            _realtyDatabase.RealEstates.Local.Remove(r);
+                        }
                     }
 
+                    // и только потом владельца
                     _realtyDatabase.Owners.Local.Remove(realEstate.Owner);
+
                     SaveData();
+
+                    RefreshListBox();
+
+                }
+            }
+        }
+
+        private void _buttonDeleteImages_Click(object sender, RoutedEventArgs e)
+        {
+            if (_realtyListBox.SelectedIndex != -1)
+            {
+                RealEstate realEstate = (RealEstate)_realtyListBox.SelectedItem;
+
+                if (realEstate.Pictures.Any())
+                {
+                    MessageBoxResult result = MessageBox.Show(
+                    $"Вы действительно хотите удалить изображения \"{realEstate}\"?",
+                    "Внимание!",
+                    MessageBoxButton.YesNo);
+
+                    if (result != MessageBoxResult.Yes)
+                    {
+                        return;
+                    }
+
+                    // удаляем все изображения недвижимости
+                    foreach (var p in _realtyDatabase.Pictures.Local.Where(image => image.RealEstateId == realEstate.Id).Reverse())
+                    {
+                        _realtyDatabase.Pictures.Local.Remove(p);
+                    }
+
+                    SaveData();
+
                     RefreshListBox();
 
                 }
