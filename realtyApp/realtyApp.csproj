@@ -67,11 +67,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="LoginWindow.xaml">
+    <Compile Include="Pages.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -79,18 +83,22 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LoginWindow.xaml.cs">
-      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    <Compile Include="LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="RealEstateWindow.xaml">
+    <Page Include="RealEstatePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="RealEstateOwnerWindow.xaml">
+    <Page Include="RealEstateOwnerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -125,11 +133,11 @@
     <Compile Include="Models\User.cs">
       <DependentUpon>RealtyModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RealEstateWindow.xaml.cs">
-      <DependentUpon>RealEstateWindow.xaml</DependentUpon>
+    <Compile Include="RealEstatePage.xaml.cs">
+      <DependentUpon>RealEstatePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RealEstateOwnerWindow.xaml.cs">
-      <DependentUpon>RealEstateOwnerWindow.xaml</DependentUpon>
+    <Compile Include="RealEstateOwnerPage.xaml.cs">
+      <DependentUpon>RealEstateOwnerPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

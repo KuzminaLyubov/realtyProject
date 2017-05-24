@@ -1,0 +1,65 @@
+﻿<Page
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RealtyApp"
+        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="MainPageName" x:Class="RealtyApp.MainPage"
+        mc:Ignorable="d"
+        Title="Объекты недвижимости" Loaded="Page_Loaded">
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <GroupBox DockPanel.Dock="Top" Header="Поиск" Padding="5">
+                <DockPanel>
+                    <Label DockPanel.Dock="Left" Content="Поиск"/>
+                    <TextBox x:Name="_searchTextBox" RenderTransformOrigin="0.5,0.5" Padding="0,4,0,0" TextChanged="Page_SearchTextBox_TextChanged"/>
+                </DockPanel>
+            </GroupBox>
+            <GroupBox DockPanel.Dock="Left" Header="Список объектов недвижимости" FontWeight="Bold">
+                <ListBox x:Name="_realtyListBox"  FontWeight="Normal"
+                            SelectedValuePath="Address"  
+                            DisplayMemberPath="Address" 
+                            SelectionChanged="Page_RealtyListBox_SelectionChanged"/>
+            </GroupBox>
+            <StackPanel DockPanel.Dock="Right">
+                <GroupBox Header="Владелец недвижимости" FontWeight="Bold">
+                    <StackPanel>
+                        <Label x:Name="_labelOwner" Content="Фамилия имя отчество:" FontWeight="Bold"/>
+                        <TextBlock x:Name="_textBlockFullName" Height="20" FontWeight="Normal"/>
+                        <Label x:Name="_labelPhoneNumber" Content="Мобильный телефон владельца:" FontWeight="Bold"/>
+                        <TextBlock x:Name="_textBlockPhoneNumber" Height="20" FontWeight="Normal"/>
+                        <DockPanel DockPanel.Dock="Bottom">
+                            <Button x:Name="_buttonAddOwner" Content="Добавить" Margin="5 0 5 5" Click="Page_ButtonAddOwner_Click"
+                        VerticalAlignment="Top" Width="95" Height="25" HorizontalAlignment="Left"/>
+                            <Button x:Name="_buttonEditOwner" Content="Редактировать"  Margin="5 0 5 5" Click="Page_ButtonEditOwner_Click"
+                        VerticalAlignment="Top" Width="95" Height="25" HorizontalAlignment="Left"/>
+                            <Button x:Name="_buttonDeleteOwner" Content="Удалить"  Margin="5 0 5 5" Click="Page_ButtonDeleteOwner_Click"
+                        VerticalAlignment="Top" Width="95" Height="25" HorizontalAlignment="Left"/>
+                        </DockPanel>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Объект недвижимости" FontWeight="Bold">
+                    <StackPanel>
+                        <Label x:Name="_labelTitle" Content="Название:" FontWeight="Bold"/>
+                        <TextBlock x:Name="_textBlockTitle" Height="20" FontWeight="Normal"/>
+                        <Label x:Name="_labelAddress" Content="Адрес объекта недвижимости:" FontWeight="Bold" />
+                        <TextBlock x:Name="_textBlockAddress" Height="20" FontWeight="Normal"/>
+                        <Label x:Name="_labelPrice" Content="Стоимость (руб):" FontWeight="Bold"/>
+                        <TextBlock x:Name="_textBlockPrice" Height="20" FontWeight="Normal"/>
+                        <DockPanel DockPanel.Dock="Bottom">
+                            <Button x:Name="_buttonAdd" Content="Добавить" Margin="5 0 5 5"
+                        VerticalAlignment="Top" Width="95" Height="25" HorizontalAlignment="Left" Click="Page_ButtonAdd_Click"/>
+                            <Button x:Name="_buttonEdit" Content="Редактировать"  Margin="5 0 5 5"
+                        VerticalAlignment="Top" Width="95" Height="25" HorizontalAlignment="Left" Click="Page_ButtonEdit_Click"/>
+                            <Button x:Name="_buttonDelete" Content="Удалить"  Margin="5 0 5 5"
+                        VerticalAlignment="Top" Width="95" Height="25" HorizontalAlignment="Left" Click="Page_ButtonDelete_Click"/>
+                            <Button x:Name="_buttonDeleteImages" Content="Удалить изображения"  Margin="5 0 5 5"
+                        VerticalAlignment="Top" Width="135" Height="25" HorizontalAlignment="Left" Click="Page_ButtonDeleteImages_Click"/>
+                        </DockPanel>
+                        <DockPanel x:Name="_dockPanelImages" ScrollViewer.HorizontalScrollBarVisibility="Auto"></DockPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Page>

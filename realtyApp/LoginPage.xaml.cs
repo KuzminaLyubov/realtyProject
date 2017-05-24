@@ -5,15 +5,14 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using RealtyApp.Models;
-using System.Data.Entity;
-using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace RealtyApp
 {
     /// <summary>
-    /// Interaction logic for LoginWindow.xaml
+    /// Interaction logic for LoginPage.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class LoginPage : Page
     {
         public enum LoginRegime
         {
@@ -26,7 +25,7 @@ namespace RealtyApp
 
         private RealtyDatabaseEntities _realtyDatabase;
 
-        public LoginWindow(RealtyDatabaseEntities realtyDatabase)
+        public LoginPage(RealtyDatabaseEntities realtyDatabase)
         {
             InitializeComponent();
             // При загрузке страницы передаем фокус первому текстбоксу, чтобы
@@ -56,15 +55,21 @@ namespace RealtyApp
 
             return CalculateHash(_passwordBox.Password) == hashFromDb;
         }
+        private void Page_ButtonReadonly_Click(object sender, RoutedEventArgs e)
+        {
+            Regime = LoginRegime.ReadOnly;
+            Pages.MainPage.SetReadOnly();
+            NavigationService.Navigate(Pages.MainPage);
+        }
 
-        private void buttonLogin_Click(object sender, RoutedEventArgs e)
+        private void Page_ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
 
             if (AdminLoginSuccessful())
             {
                 Regime = LoginRegime.Admin;
                 _labelError.Visibility = Visibility.Hidden;
-                Close();
+                NavigationService.Navigate(Pages.MainPage);
             }
             else
             {
@@ -72,20 +77,19 @@ namespace RealtyApp
                 _labelError.Visibility = Visibility.Visible;
                 _passwordBox.Clear();
             }
+
         }
 
         private void Page_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             // Using keyboard handling on the page level
             if (e.Key == Key.Enter)
-                buttonLogin_Click(null, null);
+                Page_ButtonLogin_Click(null, null);
         }
 
-        private void _buttonReadonly_Click(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Regime = LoginRegime.ReadOnly;
-            Close();
+            Pages.MainWindow.Title = this.Title;
         }
-
     }
 }

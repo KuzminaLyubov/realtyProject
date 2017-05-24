@@ -1,0 +1,28 @@
+﻿<Page
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RealtyApp"
+        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="LoginPageName" x:Class="RealtyApp.LoginPage"
+        mc:Ignorable="d"
+        Title="Вход в систему" 
+        PreviewKeyDown="Page_PreviewKeyDown">
+    <Grid>
+        <StackPanel>
+            <Label x:Name="_labelError" Content="Неверный логин или пароль" Margin="10,10,10,10" 
+            VerticalAlignment="Top" Width="150" Height="25" HorizontalAlignment="Center" Visibility="Visible" FontWeight="Bold"/>
+            <Label x:Name="_labelLogin" Content="Логин администратора:" Margin="10,10,10,10" 
+            VerticalAlignment="Top" Width="150" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
+            <TextBox x:Name="_textBoxLogin" Height="25" Margin="10,10,10,10" 
+                 TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+            <Label x:Name="_labelPassword" Content="Пароль администратора:" Margin="10,10,10,10" 
+            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
+            <PasswordBox x:Name="_passwordBox" Margin="10,10,10,10" VerticalAlignment="Top" Height="25"/>
+            <Button x:Name="_buttonLogin" Content="Вход"  Margin="10,10,10,10" 
+                VerticalAlignment="Top" Width="120" Height="25" HorizontalAlignment="Center" Click="Page_ButtonLogin_Click"/>
+            <Button x:Name="_buttonReadonly" Content="В режиме чтения"  Margin="10,10,10,10" 
+                VerticalAlignment="Top" Width="120" Height="25" HorizontalAlignment="Center" Click="Page_ButtonReadonly_Click"/>
+        </StackPanel>
+    </Grid>
+</Page>
