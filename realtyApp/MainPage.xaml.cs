@@ -5,6 +5,7 @@ using RealtyApp.Models;
 using System.Windows.Media.Imaging;
 using System.IO;
 using System.Windows.Media;
+using Microsoft.Win32;
 
 namespace RealtyApp
 {
@@ -31,6 +32,7 @@ namespace RealtyApp
             _buttonEditOwner.Visibility = Visibility.Hidden;
             _buttonDeleteOwner.Visibility = Visibility.Hidden;
             _buttonAddOwner.Visibility = Visibility.Hidden;
+            _buttonAddImages.Visibility = Visibility.Hidden;
             _buttonDeleteImages.Visibility = Visibility.Hidden;
         }
 
@@ -60,35 +62,6 @@ namespace RealtyApp
                 Search();
         }
 
-        private void Page_ButtonAdd_Click(object sender, RoutedEventArgs e)
-        {
-            var window = new RealEstateWindow(_realtyDatabase);
-            window.RealEstate = new RealEstate();
-            if (window.ShowDialog().Value)
-            {
-                _realtyDatabase.RealEstates.Add(window.RealEstate);
-                SaveData();
-                _realtyListBox.SelectedItem = window.RealEstate;
-                RefreshListBox();
-
-            }
-        }
-
-        private void Page_ButtonEdit_Click(object sender, RoutedEventArgs e)
-        {
-            if (_realtyListBox.SelectedIndex == -1)
-                return;
-
-            var window = new RealEstateWindow(_realtyDatabase);
-            window.RealEstate = (RealEstate)_realtyListBox.SelectedItem;
-            if (window.ShowDialog().Value)
-            {
-                SaveData();
-                _realtyListBox.SelectedItem = window.RealEstate;
-                RefreshListBox();
-            }
-        }
-
         private void Page_ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
             if (_realtyListBox.SelectedIndex != -1)
@@ -108,8 +81,6 @@ namespace RealtyApp
                     }
 
                     _realtyDatabase.RealEstates.Local.Remove(realEstate);
-
-                    SaveData();
 
                     RefreshListBox();
                 }
@@ -166,39 +137,6 @@ namespace RealtyApp
             return imgSrc;
         }
 
-        private async void SaveData()
-        {
-            await _realtyDatabase.SaveChangesAsync();
-        }
-
-        private void Page_ButtonAddOwner_Click(object sender, RoutedEventArgs e)
-        {
-            var window = new RealEstateOwnerWindow();
-            window.RealEstateOwner = new Owner();
-            if (window.ShowDialog().Value)
-            {
-                _realtyDatabase.Owners.Add(window.RealEstateOwner);
-                SaveData();
-                RefreshListBox();
-
-            }
-        }
-
-        private void Page_ButtonEditOwner_Click(object sender, RoutedEventArgs e)
-        {
-            if (_realtyListBox.SelectedIndex == -1)
-                return;
-
-            var window = new RealEstateOwnerWindow();
-            RealEstate realEstate = (RealEstate)_realtyListBox.SelectedItem;
-            window.RealEstateOwner = realEstate.Owner;
-            if (window.ShowDialog().Value)
-            {
-                SaveData();
-                RefreshListBox();
-            }
-        }
-
         private void Page_ButtonDeleteOwner_Click(object sender, RoutedEventArgs e)
         {
 
@@ -242,7 +180,7 @@ namespace RealtyApp
                     // и только потом владельца
                     _realtyDatabase.Owners.Local.Remove(realEstate.Owner);
 
-                    SaveData();
+                    _realtyDatabase.SaveChangesAsync();
 
                     RefreshListBox();
 
@@ -274,7 +212,7 @@ namespace RealtyApp
                         _realtyDatabase.Pictures.Local.Remove(p);
                     }
 
-                    SaveData();
+                    _realtyDatabase.SaveChangesAsync();
 
                     RefreshListBox();
 
@@ -282,11 +220,87 @@ namespace RealtyApp
             }
         }
 
+        private void Page_ButtonAddImages_Click(object sender, RoutedEventArgs e)
+        {
+            RealEstate realEstate = (RealEstate)_realtyListBox.SelectedItem;
+
+            if (realEstate == null)
+                return;
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.Filter = "Images (*.jpg)|*.jpg|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                foreach (string filename in openFileDialog.FileNames)
+                {
+                    _realtyDatabase.Pictures.Local.Add(new Picture
+                    {
+                        Name = Path.GetFileName(filename),
+                        Content = File.ReadAllBytes(filename),
+                        RealEstateId = realEstate.Id
+                    });
+                }
+
+                RefreshListBox();
+            }
+        }
+
+        private void Page_ButtonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            Pages.RealEstatePage.RealEstate = new RealEstate();
+            Pages.RealEstatePage.CurrentRegime = PageRegime.Add;
+            NavigationService.Navigate(Pages.RealEstatePage);
+        }
+
+        private void Page_ButtonEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (_realtyListBox.SelectedIndex == -1)
+                return;
+
+            Pages.RealEstatePage.RealEstate = (RealEstate)_realtyListBox.SelectedItem;
+            Pages.RealEstatePage.CurrentRegime = PageRegime.Edit;
+            NavigationService.Navigate(Pages.RealEstatePage);
+
+        }
+
+        private void Page_ButtonAddOwner_Click(object sender, RoutedEventArgs e)
+        {
+            Pages.RealEstateOwnerPage.RealEstateOwner = new Owner();
+            Pages.RealEstateOwnerPage.CurrentRegime = PageRegime.Add;
+            NavigationService.Navigate(Pages.RealEstateOwnerPage);
+        }
+
+        private void Page_ButtonEditOwner_Click(object sender, RoutedEventArgs e)
+        {
+            if (_realtyListBox.SelectedIndex == -1)
+                return;
+
+            RealEstate realEstate = (RealEstate)_realtyListBox.SelectedItem;
+            Pages.RealEstateOwnerPage.RealEstateOwner = realEstate.Owner;
+            Pages.RealEstateOwnerPage.CurrentRegime = PageRegime.Edit;
+            NavigationService.Navigate(Pages.RealEstateOwnerPage);
+        }
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             Pages.MainWindow.Title = this.Title;
+
             RefreshListBox();
+
+            if (Pages.RealEstatePage.CurrentRegime != PageRegime.Cancel)
+            {
+                Pages.RealEstatePage.CurrentRegime = PageRegime.Cancel;
+            }
+
+            if (Pages.RealEstateOwnerPage.CurrentRegime != PageRegime.Cancel)
+            {
+                Pages.RealEstateOwnerPage.CurrentRegime = PageRegime.Cancel;
+            }
+
         }
+
+
     }
 }
 

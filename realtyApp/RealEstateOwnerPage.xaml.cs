@@ -1,19 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using RealtyApp.Models;
+using System.Windows.Controls;
+using System.Text.RegularExpressions;
+using System.Data.Entity;
 
 namespace RealtyApp
 {
     /// <summary>
-    /// Interaction logic for RealEstateOwnerWindow.xaml
+    /// Interaction logic for RealEstateOwnerPage.xaml
     /// </summary>
-    public partial class RealEstateOwnerWindow : Window
+    public partial class RealEstateOwnerPage : Page
     {
+        private RealtyDatabaseEntities _realtyDatabase;
         private Owner _owner;
 
-        public RealEstateOwnerWindow()
+        public PageRegime CurrentRegime { get; set; }
+
+        public RealEstateOwnerPage(RealtyDatabaseEntities realtyDatabase)
         {
             InitializeComponent();
+
+            _realtyDatabase = realtyDatabase;
 
             _labelError.Visibility = Visibility.Hidden;
         }
@@ -30,7 +37,7 @@ namespace RealtyApp
             }
         }
 
-        private void _buttonAdd_Click(object sender, RoutedEventArgs e)
+        private void Page_ButtonSave_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(_textBoxFullName.Text))
             {
@@ -40,25 +47,38 @@ namespace RealtyApp
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(_textBoxPhoneNumber.Text))
+            if (string.IsNullOrWhiteSpace(_textBoxPhoneNumber.Text) || !Regex.Match(_textBoxPhoneNumber.Text, @"^(\+[0-9]{11})$").Success)
             {
                 _labelError.Visibility = Visibility.Visible;
-                _labelError.Content = "Введите мобильный телефон владельца недвижимости";
+                _labelError.Content = "Введите корректный мобильный телефон владельца недвижимости";
                 _textBoxPhoneNumber.Focus();
                 return;
             }
 
-
            _owner.FullName = _textBoxFullName.Text;
            _owner.PhoneNumber = _textBoxPhoneNumber.Text;
-            
-            DialogResult = true;
+
+            if (CurrentRegime == PageRegime.Add)
+                _realtyDatabase.Owners.Local.Add(_owner);
+
+            _realtyDatabase.SaveChanges();
+            _realtyDatabase.Owners.Load();
+
+            NavigationService.Navigate(Pages.MainPage);
         }
 
-        private void RealEstateOwnerWindowName_Loaded(object sender, RoutedEventArgs e)
+        private void Page_ButtonBack_Click(object sender, RoutedEventArgs e)
         {
+            CurrentRegime = PageRegime.Cancel;
+            NavigationService.Navigate(Pages.MainPage);
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Pages.MainWindow.Title = this.Title;
             _textBoxFullName.Text = _owner.FullName;
             _textBoxPhoneNumber.Text = _owner.PhoneNumber;
         }
+
     }
 }

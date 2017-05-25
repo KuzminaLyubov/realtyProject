@@ -14,14 +14,6 @@ namespace RealtyApp
     /// </summary>
     public partial class LoginPage : Page
     {
-        public enum LoginRegime
-        {
-            Exit,
-            ReadOnly,
-            Admin
-        }
-
-        public LoginRegime Regime { get; set; } = LoginRegime.Exit;
 
         private RealtyDatabaseEntities _realtyDatabase;
 
@@ -57,27 +49,21 @@ namespace RealtyApp
         }
         private void Page_ButtonReadonly_Click(object sender, RoutedEventArgs e)
         {
-            Regime = LoginRegime.ReadOnly;
             Pages.MainPage.SetReadOnly();
             NavigationService.Navigate(Pages.MainPage);
         }
 
         private void Page_ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
-
             if (AdminLoginSuccessful())
             {
-                Regime = LoginRegime.Admin;
                 _labelError.Visibility = Visibility.Hidden;
                 NavigationService.Navigate(Pages.MainPage);
             }
             else
             {
-                Regime = LoginRegime.Exit;
                 _labelError.Visibility = Visibility.Visible;
-                _passwordBox.Clear();
             }
-
         }
 
         private void Page_PreviewKeyDown(object sender, KeyEventArgs e)

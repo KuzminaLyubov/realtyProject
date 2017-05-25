@@ -53,8 +53,12 @@
                         VerticalAlignment="Top" Width="95" Height="25" HorizontalAlignment="Left" Click="Page_ButtonEdit_Click"/>
                             <Button x:Name="_buttonDelete" Content="Удалить"  Margin="5 0 5 5"
                         VerticalAlignment="Top" Width="95" Height="25" HorizontalAlignment="Left" Click="Page_ButtonDelete_Click"/>
+                        </DockPanel>
+                        <DockPanel DockPanel.Dock="Bottom">
+                            <Button x:Name="_buttonAddImages" Content="Добавить изображения"  Margin="5 0 5 5"
+                        VerticalAlignment="Top" Width="150" Height="25" HorizontalAlignment="Left" Click="Page_ButtonAddImages_Click"/>
                             <Button x:Name="_buttonDeleteImages" Content="Удалить изображения"  Margin="5 0 5 5"
-                        VerticalAlignment="Top" Width="135" Height="25" HorizontalAlignment="Left" Click="Page_ButtonDeleteImages_Click"/>
+                        VerticalAlignment="Top" Width="150" Height="25" HorizontalAlignment="Left" Click="Page_ButtonDeleteImages_Click"/>
                         </DockPanel>
                         <DockPanel x:Name="_dockPanelImages" ScrollViewer.HorizontalScrollBarVisibility="Auto"></DockPanel>
                     </StackPanel>

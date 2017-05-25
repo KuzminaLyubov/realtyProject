@@ -4,22 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RealtyApp"
-        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="RealEstateOwnerWindowName" x:Class="RealtyApp.RealEstateOwnerWindow"
+        xmlns:Models="clr-namespace:RealtyApp.Models" x:Name="RealEstateOwnerPageName" x:Class="RealtyApp.RealEstateOwnerPage"
         mc:Ignorable="d"
-        Title="Новый владелец недвижимости" Loaded="RealEstateOwnerWindowName_Loaded">
+        Title="Новый владелец недвижимости" Loaded="Page_Loaded">
     <Grid>
         <StackPanel Margin="10 10 10 10">
             <Label x:Name="_labelError" Content="Ошибка"  
-            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible" FontWeight="Bold"/>
+            VerticalAlignment="Top" Height="25" HorizontalAlignment="Center" FontWeight="Bold"/>
             <Label x:Name="_labelFullName" Content="ФИО владельца:"  
-            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
+            VerticalAlignment="Top" Height="25" HorizontalAlignment="Left" />
             <TextBox x:Name="_textBoxFullName" Height="25" 
                  TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
             <Label x:Name="_labelPhoneNumber" Content="Мобильный телефон владельца:"
-            VerticalAlignment="Top" Width="292" Height="25" HorizontalAlignment="Center" Visibility="Visible"/>
+            VerticalAlignment="Top" Height="25" HorizontalAlignment="Left"/>
             <TextBox x:Name="_textBoxPhoneNumber"  VerticalAlignment="Top" Height="25"/>
-            <Button x:Name="_buttonAdd" Content="Добавить"  
-                VerticalAlignment="Top" Width="120" Height="25" Margin="5 5 5 5" HorizontalAlignment="Center" Click="_buttonAdd_Click"/>
+            <Button x:Name="_buttonSave" Content="Сохранить"  
+                VerticalAlignment="Top" Width="150" Height="25" Margin="5 5 5 5" HorizontalAlignment="Center" Click="Page_ButtonSave_Click"/>
+            <Button x:Name="_buttonBack" Content="Назад"  
+                VerticalAlignment="Top" Width="150" Height="25" Margin="5 5 5 5" HorizontalAlignment="Center" Click="Page_ButtonBack_Click"/>
         </StackPanel>
     </Grid>
 </Page>

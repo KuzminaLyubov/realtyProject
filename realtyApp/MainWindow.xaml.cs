@@ -25,6 +25,7 @@ namespace RealtyApp
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             base.OnClosing(e);
+            _realtyDatabase.SaveChanges();
             _realtyDatabase.Dispose();
         }
 
@@ -41,8 +42,11 @@ namespace RealtyApp
             // LoadAsync - asynchronous call without blocking the window thread
             await _realtyDatabase.Pictures.LoadAsync();
 
+            Pages.MainWindow = this;
             Pages.LoginPage = new LoginPage(_realtyDatabase);
             Pages.MainPage = new MainPage(_realtyDatabase);
+            Pages.RealEstatePage = new RealEstatePage(_realtyDatabase);
+            Pages.RealEstateOwnerPage = new RealEstateOwnerPage(_realtyDatabase);
 
             frameMain.Navigate(Pages.LoginPage);
 

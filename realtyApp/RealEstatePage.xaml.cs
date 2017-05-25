@@ -1,21 +1,21 @@
-﻿
-using System.Windows;
+﻿using System.Windows;
 using RealtyApp.Models;
 using System.Linq;
-using System.IO;
-using Microsoft.Win32;
-using System.Collections.Generic;
+using System.Windows.Controls;
+using System.Data.Entity;
 
 namespace RealtyApp
 {
     /// <summary>
-    /// Interaction logic for NewRealEstateWindow.xaml
+    /// Interaction logic for RealEstatePage.xaml
     /// </summary>
-    public partial class RealEstateWindow : Window
+    public partial class RealEstatePage : Page
     {
         private RealtyDatabaseEntities _realtyDatabase;
 
-        public RealEstateWindow(RealtyDatabaseEntities realtyDatabase)
+        public PageRegime CurrentRegime { get; set; }
+
+        public RealEstatePage(RealtyDatabaseEntities realtyDatabase)
         {
             InitializeComponent();
 
@@ -38,7 +38,7 @@ namespace RealtyApp
             }
         }
 
-        private void _buttonAdd_Click(object sender, RoutedEventArgs e)
+        private void Page_ButtonSave_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(_textBoxTitle.Text))
             {
@@ -87,37 +87,30 @@ namespace RealtyApp
             _realEstate.Price = price;
             _realEstate.Owner = _comboBoxOwner.SelectedItem as Owner;
 
-            // Close current window
-            DialogResult = true;
+            if (CurrentRegime == PageRegime.Add)
+                _realtyDatabase.RealEstates.Local.Add(_realEstate);
+
+            _realtyDatabase.SaveChanges();
+            _realtyDatabase.RealEstates.Load();
+
+            NavigationService.Navigate(Pages.MainPage);
         }
 
-        private void RealEstateWindowName_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-             _comboBoxOwner.ItemsSource = _realtyDatabase.Owners.Local.OrderBy(owner => owner.FullName);
+            Pages.MainWindow.Title = this.Title;
+
+            _comboBoxOwner.ItemsSource = _realtyDatabase.Owners.Local.OrderBy(owner => owner.FullName);
             _comboBoxOwner.SelectedItem = _realEstate.Owner;
             _textBoxTitle.Text = _realEstate.Title;
             _textBoxAddress.Text = _realEstate.Address;
             _textBoxPrice.Text = _realEstate.Price.ToString();
         }
 
-        private void _buttonImageAdd_Click(object sender, RoutedEventArgs e)
+        private void Page_ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = true;
-            openFileDialog.Filter = "Images (*.jpg)|*.jpg|All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == true)
-            {
-                foreach (string filename in openFileDialog.FileNames)
-                {
-                    _realtyDatabase.Pictures.Add(new Picture
-                    {
-                        Name = Path.GetFileName(filename),
-                        Content = File.ReadAllBytes(filename),
-                        RealEstateId = _realEstate.Id
-                    });
-                }
-            }
-
+            CurrentRegime = PageRegime.Cancel;
+            NavigationService.Navigate(Pages.MainPage);
         }
     }
 }
